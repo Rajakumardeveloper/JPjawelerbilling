@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JP Jewellers | Premium Bold Invoice</title>
+    <title>JP Jewellers | Ultra Bold Invoice</title>
     <style>
-@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
-
         * {
             margin: 0;
             padding: 0;
@@ -36,7 +34,7 @@
             z-index: 1;
         }
 
-        /* HEADER SECTION - Original layout, only heading font increased and enlarged */
+        /* HEADER SECTION - Original layout, heading ultra bolder */
         .vendor-header {
             border: 2px solid #000;
             padding: 12px 15px;
@@ -71,15 +69,14 @@
             color: white;
             font-weight: bold;
         }
-        /* LARGER & BOLDER HEADING - Increased font size dramatically */
+        /* ULTRA BOLDER HEADING - Maximum font weight and increased size */
         .vendor-name {
-            font-size: 20px;
+            font-size: 26px;
             font-weight: 900;
-            font-family: "Times New Roman";
-            font-style: normal;
             color: #1e466e;
-            letter-spacing: 1px;
-            text-shadow: 0.5px 0.5px 0 rgba(0,0,0,0.1);
+            letter-spacing: 1.5px;
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.08);
+            font-family: 'Segoe UI', 'Arial Black', 'Arial', sans-serif;
         }
         
         .vendor-details {
@@ -95,7 +92,7 @@
             font-weight: 800;
             color: #1e466e;
         }
-        /* Date row - centered only the date element (original layout) */
+        /* Date row - centered only the date element */
         .date-row {
             display: flex;
             justify-content: center;
@@ -112,7 +109,7 @@
             display: inline-block;
         }
 
-        /* Box system for meta sections - unchanged */
+        /* Box system for meta sections */
         .invoice-meta {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -179,7 +176,7 @@
             display: none;
         }
 
-        /* Items Table - Original borders */
+        /* Items Table */
         .items-wrapper {
             border: 2px solid #000;
             margin: 15px 0;
@@ -242,7 +239,7 @@
             font-weight: 800;
         }
 
-        /* Totals sections - Original design */
+        /* Totals sections */
         .totals-grid {
             display: grid;
             grid-template-columns: 1fr 1.2fr;
@@ -285,7 +282,7 @@
             border-left: 4px solid #1e466e;
         }
 
-        /* Signature footer - Original */
+        /* Signature footer */
         .signature-footer {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -382,17 +379,21 @@
             .vendor-details, .contact-row, .meta-label, .meta-value, .tax-row, .words-box, .sign-box {
                 font-weight: 800 !important;
             }
+            .vendor-name {
+                font-size: 34px !important;
+                font-weight: 900 !important;
+            }
         }
     </style>
 </head>
 <body>
 <div class="invoice-container">
     <div class="invoice">
-        <!-- HEADER SECTION - Original layout, only heading font size increased to 32px and weight 900 -->
+        <!-- HEADER SECTION - Original layout, heading ultra bolder font -->
         <div class="vendor-header">
             <div class="company-header">
                 <div class="company-icon">
-                    <img src="icon.png" alt="JP Jewellers Logo" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'no-image\'>JP</div>'">
+                    <div class="no-image">JP</div>
                 </div>
                 <div class="vendor-name">J.P JEWELLERS - Gold & Silver Merchants</div>
             </div>
@@ -403,9 +404,9 @@
             <div class="contact-row">
                 <strong>Contact:</strong> 9919463098 , 9956624200
             </div>
-            <!-- Date centered only -->
+            <!-- Date centered only - Fixed with proper ID and inline display -->
             <div class="date-row">
-                <div class="date-box"><strong>DATE:</strong> <span id="invoiceDateDisplay"></span></div>
+                <div class="date-box"><strong>DATE:</strong> <span id="headerDateDisplay">--/--/----</span></div>
             </div>
         </div>
 
@@ -485,7 +486,7 @@
         </div>
 
         <div class="action-bar">
-            
+            <button id="saveInvoiceBtn" class="btn-save">💾 SAVE INVOICE</button>
             <button id="printBtn" class="btn-print">🖨️ PRINT / PDF (A4)</button>
         </div>
     </div>
@@ -522,8 +523,18 @@
         let m = String(now.getMonth()+1).padStart(2,'0');
         let d = String(now.getDate()).padStart(2,'0');
         let formattedDate = `${d}/${m}/${y}`;
-        document.getElementById('billDate').value = formattedDate;
-        document.getElementById('invoiceDateDisplay').innerText = formattedDate;
+        
+        // Set date in shipping details section
+        let billDateInput = document.getElementById('billDate');
+        if(billDateInput) {
+            billDateInput.value = formattedDate;
+        }
+        
+        // Set date in header centered box
+        let headerDateSpan = document.getElementById('headerDateDisplay');
+        if(headerDateSpan) {
+            headerDateSpan.innerText = formattedDate;
+        }
     }
 
     // Determine if item is Gold based on purity
@@ -851,6 +862,7 @@
         cb.onchange = updatePrintDisplay;
     });
     
+    // Initialize everything
     setInvoiceMeta();
     itemsData = [];
     recalcAll();
