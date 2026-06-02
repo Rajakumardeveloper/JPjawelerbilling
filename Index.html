@@ -316,9 +316,7 @@
         <div class="vendor-header">
             <div class="company-header">
                 <div class="company-icon">
-                    <div class="image">
-                        <img src="icon.png">
-                    </div>
+                    <div class="no-image">JP</div>
                 </div>
                 <div class="vendor-name">J.P JEWELLERS - Gold & Silver Merchants</div>
             </div>
@@ -361,10 +359,15 @@
             </div>
         </div>
 
+        <!-- ITEMS TABLE - HSN column removed -->
         <div class="items-wrapper">
             <table class="items-table">
                 <thead>
-                    <tr><th>SL</th><th>Item Description</th><th>Purity</th><th>Gross Wt (g)</th><th>Stone Wt (g)</th><th>Net Wt (g)</th><th>Rate/g (₹)</th><th>Making Type</th><th>Making %/₹</th><th>Action</th></tr>
+                    <tr>
+                        <th>SL</th><th>Item Description</th><th>Purity</th><th>Gross Wt (g)</th>
+                        <th>Stone Wt (g)</th><th>Net Wt (g)</th><th>Rate/g (₹)</th><th>Making Type</th><th>Making %/₹</th>
+                        <th>Action</th>
+                    </tr>
                 </thead>
                 <tbody id="invoiceRows"></tbody>
             </table>
@@ -373,10 +376,10 @@
             <button class="add-item-btn" id="addItemBtn">+ Add Item</button>
         </div>
 
+        <!-- BILL SUMMARY - Net Weight (g) removed -->
         <div class="totals-grid">
             <div class="tax-card">
                 <h5>Bill Summary</h5>
-                
                 <div class="tax-row"><span>Total Net Value :</span><span id="totalNetValue">₹0.00</span></div>
                 <div class="tax-row"><span>Total Making Charges :</span><span id="totalMakingValue">₹0.00</span></div>
                 <div class="tax-row"><span>Sub Total :</span><span id="subTotalValue">₹0.00</span></div>
@@ -436,7 +439,7 @@
     }
 
     function calculate() {
-        let totalNetWt = 0, totalNetVal = 0, totalMaking = 0, totalSub = 0;
+        let totalNetVal = 0, totalMaking = 0, totalSub = 0;
         for(let row of itemsData) {
             updateMaking(row);
             let gross = toNumber(row.grossWt), stone = toNumber(row.stoneWt);
@@ -448,14 +451,12 @@
             row.makingValue = making;
             let sub = netVal + making;
             row.rowTotal = sub;
-            totalNetWt += netWt;
             totalNetVal += netVal;
             totalMaking += making;
             totalSub += sub;
         }
         let discount = toNumber(discountInput.value);
         let grand = Math.max(0, totalSub - discount);
-        document.getElementById('totalNetWeightGrams').innerHTML = totalNetWt.toFixed(3) + ' g';
         document.getElementById('totalNetValue').innerHTML = '₹' + totalNetVal.toFixed(2);
         document.getElementById('totalMakingValue').innerHTML = '₹' + totalMaking.toFixed(2);
         document.getElementById('subTotalValue').innerHTML = '₹' + totalSub.toFixed(2);
@@ -501,7 +502,7 @@
         if(itemsData.length === 0) {
             let tr = tbody.insertRow();
             let td = tr.insertCell();
-            td.colSpan = 11;
+            td.colSpan = 10;
             td.style.textAlign = 'center';
             td.style.padding = '20px';
             td.innerText = '— Click "Add Item" to add products —';
@@ -519,7 +520,8 @@
             inpDesc.placeholder = 'Item name';
             inpDesc.onchange = (function(r){return function(e){r.itemDesc=e.target.value;calculate();}})(row);
             td1.appendChild(inpDesc);
-            let td3 = tr.insertCell();
+            
+            let td2 = tr.insertCell();
             let selPur = document.createElement('select');
             ['24K (Gold)','22K (Gold)','18K (Gold)','14K (Gold)','9K (Gold)','Gold Ornaments','Silver 999','Silver Ornaments'].forEach(p=>{
                 let opt = document.createElement('option');
@@ -529,9 +531,9 @@
                 selPur.appendChild(opt);
             });
             selPur.onchange = (function(r){return function(e){r.purity=e.target.value;updateMaking(r);calculate();}})(row);
-            td3.appendChild(selPur);
+            td2.appendChild(selPur);
             
-            let td4 = tr.insertCell();
+            let td3 = tr.insertCell();
             let inpGr = document.createElement('input');
             inpGr.type = 'number';
             inpGr.value = row.grossWt || '';
@@ -539,9 +541,9 @@
             inpGr.style.width = '50px';
             inpGr.placeholder = '0.00';
             inpGr.onchange = (function(r){return function(e){r.grossWt=toNumber(e.target.value);calculate();}})(row);
-            td4.appendChild(inpGr);
+            td3.appendChild(inpGr);
             
-            let td5 = tr.insertCell();
+            let td4 = tr.insertCell();
             let inpSt = document.createElement('input');
             inpSt.type = 'number';
             inpSt.value = row.stoneWt || '';
@@ -549,14 +551,14 @@
             inpSt.style.width = '50px';
             inpSt.placeholder = '0.00';
             inpSt.onchange = (function(r){return function(e){r.stoneWt=toNumber(e.target.value);calculate();}})(row);
-            td5.appendChild(inpSt);
+            td4.appendChild(inpSt);
+            
+            let td5 = tr.insertCell();
+            let netDisplay = Math.max(0, toNumber(row.grossWt) - toNumber(row.stoneWt)).toFixed(3);
+            td5.innerText = netDisplay;
+            td5.style.fontWeight = 'bold';
             
             let td6 = tr.insertCell();
-            let netDisplay = Math.max(0, toNumber(row.grossWt) - toNumber(row.stoneWt)).toFixed(3);
-            td6.innerText = netDisplay;
-            td6.style.fontWeight = 'bold';
-            
-            let td7 = tr.insertCell();
             let inpRate = document.createElement('input');
             inpRate.type = 'number';
             inpRate.value = row.ratePerGram || '';
@@ -564,9 +566,9 @@
             inpRate.style.width = '55px';
             inpRate.placeholder = 'Rate';
             inpRate.onchange = (function(r){return function(e){r.ratePerGram=toNumber(e.target.value);calculate();}})(row);
-            td7.appendChild(inpRate);
+            td6.appendChild(inpRate);
             
-            let td8 = tr.insertCell();
+            let td7 = tr.insertCell();
             let selType = document.createElement('select');
             let optP = document.createElement('option');
             optP.value = 'percentage';
@@ -578,7 +580,7 @@
             selType.appendChild(optF);
             selType.value = row.makingType || 'percentage';
             selType.onchange = (function(r){return function(e){r.makingType=e.target.value;calculate();}})(row);
-            td8.appendChild(selType);
+            td7.appendChild(selType);
             let spanType = document.createElement('span');
             spanType.className = 'making-type-text';
             spanType.style.display = 'none';
@@ -587,9 +589,9 @@
             spanType.style.padding = '2px 6px';
             spanType.style.borderRadius = '3px';
             spanType.innerText = row.makingType === 'percentage' ? 'Gold %' : 'Fixed ₹';
-            td8.appendChild(spanType);
+            td7.appendChild(spanType);
             
-            let td9 = tr.insertCell();
+            let td8 = tr.insertCell();
             let inpMake = document.createElement('input');
             inpMake.type = 'number';
             inpMake.step = '0.1';
@@ -607,27 +609,27 @@
                 else r.makingFixed = v;
                 calculate();
             }})(row);
-            td9.appendChild(inpMake);
+            td8.appendChild(inpMake);
             let spanMake = document.createElement('span');
             spanMake.className = 'making-value-text';
             spanMake.style.display = 'none';
             spanMake.style.fontWeight = 'bold';
             if(row.makingType === 'percentage') spanMake.innerText = (row.makingPercent || 12) + '%';
             else spanMake.innerText = '₹' + (row.makingFixed || 150);
-            td9.appendChild(spanMake);
+            td8.appendChild(spanMake);
             
-            let td10 = tr.insertCell();
+            let td9 = tr.insertCell();
             let delBtn = document.createElement('button');
             delBtn.innerHTML = '❌';
             delBtn.className = 'delete-btn';
             delBtn.onclick = (function(idx){return function(){itemsData.splice(idx,1);calculate();}})(i);
-            td10.appendChild(delBtn);
+            td9.appendChild(delBtn);
         }
     }
 
     function addItem() {
         itemsData.push({
-            itemDesc: '', hsn: '7113', purity: '22K (Gold)',
+            itemDesc: '', purity: '22K (Gold)',
             grossWt: 0, stoneWt: 0, netWt: 0, ratePerGram: 0,
             makingType: 'percentage', makingPercent: 12, makingFixed: 150,
             makingValue: 0, rowTotal: 0
