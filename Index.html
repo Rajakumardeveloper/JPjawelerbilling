@@ -316,7 +316,9 @@
         <div class="vendor-header">
             <div class="company-header">
                 <div class="company-icon">
-                    <div class="no-image">JP</div>
+                    <div class="image">
+                        <img src="icon.png">
+                    </div>
                 </div>
                 <div class="vendor-name">J.P JEWELLERS - Gold & Silver Merchants</div>
             </div>
@@ -362,7 +364,7 @@
         <div class="items-wrapper">
             <table class="items-table">
                 <thead>
-                    <tr><th>SL</th><th>Item Description</th><th>HSN</th><th>Purity</th><th>Gross Wt (g)</th><th>Stone Wt (g)</th><th>Net Wt (g)</th><th>Rate/g (₹)</th><th>Making Type</th><th>Making %/₹</th><th>Action</th></tr>
+                    <tr><th>SL</th><th>Item Description</th><th>Purity</th><th>Gross Wt (g)</th><th>Stone Wt (g)</th><th>Net Wt (g)</th><th>Rate/g (₹)</th><th>Making Type</th><th>Making %/₹</th><th>Action</th></tr>
                 </thead>
                 <tbody id="invoiceRows"></tbody>
             </table>
@@ -374,7 +376,7 @@
         <div class="totals-grid">
             <div class="tax-card">
                 <h5>Bill Summary</h5>
-                <div class="tax-row"><span>Total Net Weight (g) :</span><span id="totalNetWeightGrams">0.000 g</span></div>
+                
                 <div class="tax-row"><span>Total Net Value :</span><span id="totalNetValue">₹0.00</span></div>
                 <div class="tax-row"><span>Total Making Charges :</span><span id="totalMakingValue">₹0.00</span></div>
                 <div class="tax-row"><span>Sub Total :</span><span id="subTotalValue">₹0.00</span></div>
@@ -517,15 +519,6 @@
             inpDesc.placeholder = 'Item name';
             inpDesc.onchange = (function(r){return function(e){r.itemDesc=e.target.value;calculate();}})(row);
             td1.appendChild(inpDesc);
-            
-            let td2 = tr.insertCell();
-            let inpHS = document.createElement('input');
-            inpHS.type = 'text';
-            inpHS.value = row.hsn || '7113';
-            inpHS.style.width = '50px';
-            inpHS.onchange = (function(r){return function(e){r.hsn=e.target.value;}})(row);
-            td2.appendChild(inpHS);
-            
             let td3 = tr.insertCell();
             let selPur = document.createElement('select');
             ['24K (Gold)','22K (Gold)','18K (Gold)','14K (Gold)','9K (Gold)','Gold Ornaments','Silver 999','Silver Ornaments'].forEach(p=>{
