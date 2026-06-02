@@ -58,8 +58,16 @@
             justify-content: center;
             flex-shrink: 0;
         }
-        .company-icon image img {
-            background-position: center;
+        .company-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .company-icon .no-image {
+            font-size: 16px;
+            color: white;
+            font-weight: bold;
+            display: none;
         }
         .vendor-name {
             font-size: 22px;
@@ -314,9 +322,8 @@
         <div class="vendor-header">
             <div class="company-header">
                 <div class="company-icon">
-                    <div class="image">
-                        <img src="icon.png" >
-                    </div>
+                    <img src="icon.png" alt="JP Jewellers Logo" onerror="this.style.display='none'; this.parentElement.querySelector('.no-image').style.display='flex';">
+                    <div class="no-image">JP</div>
                 </div>
                 <div class="vendor-name">J.P JEWELLERS - Gold & Silver Merchants</div>
             </div>
@@ -536,7 +543,7 @@
             let td3 = tr.insertCell();
             let inpGr = document.createElement('input');
             inpGr.type = 'number';
-            inpGr.value = row.grossWt || '';
+            inpGr.value = row.grossWt !== undefined && row.grossWt !== 0 ? row.grossWt : '';
             inpGr.step = '0.01';
             inpGr.style.width = '50px';
             inpGr.placeholder = '0.00';
@@ -546,7 +553,7 @@
             let td4 = tr.insertCell();
             let inpSt = document.createElement('input');
             inpSt.type = 'number';
-            inpSt.value = row.stoneWt || '';
+            inpSt.value = row.stoneWt !== undefined && row.stoneWt !== 0 ? row.stoneWt : '';
             inpSt.step = '0.01';
             inpSt.style.width = '50px';
             inpSt.placeholder = '0.00';
@@ -561,7 +568,7 @@
             let td6 = tr.insertCell();
             let inpRate = document.createElement('input');
             inpRate.type = 'number';
-            inpRate.value = row.ratePerGram || '';
+            inpRate.value = row.ratePerGram !== undefined && row.ratePerGram !== 0 ? row.ratePerGram : '';
             inpRate.step = '10';
             inpRate.style.width = '55px';
             inpRate.placeholder = 'Rate';
@@ -652,12 +659,13 @@
     function printInvoice() {
         if(document.getElementById('custName').value.trim() === '') { alert('Please enter Customer Name'); return false; }
         if(itemsData.length === 0) { alert('Please add at least one item'); return false; }
-        document.querySelectorAll('.making-select, .making-input').forEach(el => el.style.display = 'none');
+        // Hide dropdowns and show text spans for print
+        document.querySelectorAll('select').forEach(el => el.style.display = 'none');
         document.querySelectorAll('.making-type-text, .making-value-text').forEach(el => el.style.display = 'inline-block');
         updatePrintPayment();
         window.print();
         setTimeout(() => {
-            document.querySelectorAll('.making-select, .making-input').forEach(el => el.style.display = '');
+            document.querySelectorAll('select').forEach(el => el.style.display = '');
             document.querySelectorAll('.making-type-text, .making-value-text').forEach(el => el.style.display = 'none');
         }, 100);
         return true;
