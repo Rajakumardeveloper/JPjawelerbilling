@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JP Jewellers | Premium Bold Invoice</title>
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #eef2f5;
+            font-family: 'Segoe UI', 'Arial', 'Helvetica', sans-serif;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .invoice-container {
+            max-width: 1300px;
+            width: 100%;
+            background: white;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .invoice {
+            padding: 20px 25px 25px 25px;
+            background: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* HEADER SECTION - Original layout, only heading font increased and enlarged */
+        .vendor-header {
+            border: 2px solid #000;
+            padding: 12px 15px;
+            margin-bottom: 18px;
+            background: #fefefe;
+        }
+        
+        .company-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .company-icon {
+            width: 33px;
+            height: 33px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #1e466e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .company-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .company-icon .no-image {
+            font-size: 16px;
+            color: white;
+            font-weight: bold;
+        }
+        /* LARGER & BOLDER HEADING - Increased font size dramatically */
+        .vendor-name {
+            font-size: 20px;
+            font-weight: 900;
+            font-family: "Times New Roman";
+            font-style: normal;
+            color: #1e466e;
+            letter-spacing: 1px;
+            text-shadow: 0.5px 0.5px 0 rgba(0,0,0,0.1);
+        }
+        
+        .vendor-details {
+            font-size: 11px;
+            line-height: 1.5;
+            color: #1a1a1a;
+            margin-top: 5px;
+            font-weight: 700;
+        }
+        .contact-row {
+            margin-top: 6px;
+            font-size: 12px;
+            font-weight: 800;
+            color: #1e466e;
+        }
+        /* Date row - centered only the date element (original layout) */
+        .date-row {
+            display: flex;
+            justify-content: center;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed #ccc;
+        }
+        .date-box {
+            background: #f0f2f5;
+            padding: 4px 20px;
+            border-radius: 4px;
+            font-weight: 800;
+            font-size: 13px;
+            display: inline-block;
+        }
+
+        /* Box system for meta sections - unchanged */
+        .invoice-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+        .meta-box {
+            border: 2px solid #000;
+            padding: 10px 12px;
+            background: white;
+        }
+        .meta-title {
+            font-weight: 900;
+            font-size: 13px;
+            background: #f0f2f5;
+            padding: 5px 8px;
+            margin: -10px -12px 12px -12px;
+            border-bottom: 2px solid #000;
+            letter-spacing: 0.3px;
+        }
+        .meta-row {
+            display: flex;
+            margin-bottom: 8px;
+            font-size: 11px;
+            align-items: center;
+        }
+        .meta-label {
+            width: 110px;
+            font-weight: 800;
+            font-size: 11px;
+        }
+        .meta-value {
+            flex: 1;
+        }
+        .meta-value input, .meta-value select, .meta-value textarea {
+            width: 100%;
+            padding: 5px 6px;
+            border: 1px solid #333;
+            font-size: 11px;
+            font-weight: 600;
+            background: #fff;
+        }
+        
+        .payment-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+        .payment-group label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .payment-group input {
+            width: auto;
+            margin: 0;
+            cursor: pointer;
+        }
+        .print-payment-display {
+            display: none;
+        }
+
+        /* Items Table - Original borders */
+        .items-wrapper {
+            border: 2px solid #000;
+            margin: 15px 0;
+            overflow-x: auto;
+            background: white;
+        }
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+        }
+        .items-table th, .items-table td {
+            border: 1px solid #000;
+            padding: 7px 4px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .items-table th {
+            background: #e9ecef;
+            font-weight: 900;
+            font-size: 10px;
+            padding: 8px 3px;
+        }
+        .items-table input, .items-table select {
+            width: 100%;
+            padding: 4px;
+            border: 1px solid #333;
+            font-size: 10px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .making-select {
+            width: 75px !important;
+            padding: 4px;
+            font-size: 9px;
+            font-weight: 600;
+        }
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .delete-btn:hover {
+            background: #c82333;
+        }
+        .add-item-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 7px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            margin-right: auto;
+            font-weight: 800;
+        }
+
+        /* Totals sections - Original design */
+        .totals-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 18px;
+            margin: 15px 0;
+        }
+        .tax-card, .amount-card {
+            border: 2px solid #000;
+            padding: 10px 12px;
+            background: white;
+        }
+        .tax-card h5, .amount-card h5 {
+            background: #e9ecef;
+            margin: -10px -12px 12px -12px;
+            padding: 7px 10px;
+            border-bottom: 2px solid #000;
+            font-size: 13px;
+            font-weight: 900;
+        }
+        .tax-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+        .grand-total-row {
+            border-top: 2px solid #000;
+            margin-top: 10px;
+            padding-top: 8px;
+            font-weight: 900;
+            font-size: 14px;
+        }
+        .words-box {
+            background: #f8f9fa;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 11px;
+            font-weight: 800;
+            border-left: 4px solid #1e466e;
+        }
+
+        /* Signature footer - Original */
+        .signature-footer {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin: 20px 0 15px;
+            border-top: 2px solid #000;
+            padding-top: 15px;
+            background: white;
+        }
+        .sign-box {
+            border: 2px solid #000;
+            padding: 14px;
+            min-height: 80px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 800;
+            background: white;
+        }
+        .signature-line {
+            margin-top: 18px;
+            font-size: 10px;
+            font-weight: normal;
+        }
+
+        .action-bar {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 18px;
+            padding-top: 12px;
+            border-top: 1px solid #ddd;
+            background: white;
+        }
+        button {
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 5px;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.2s;
+        }
+        .btn-save { background: #28a745; }
+        .btn-save:hover { background: #218838; }
+        .btn-print { background: #1e466e; }
+        .btn-print:hover { background: #163a5a; }
+
+        /* Print Styles */
+        @media print {
+            @page { 
+                size: A4; 
+                margin: 8mm;
+            }
+            body { 
+                background: white; 
+                padding: 0; 
+                margin: 0;
+            }
+            .action-bar, .add-item-btn, .delete-btn, .payment-group { 
+                display: none !important; 
+            }
+            .invoice { 
+                padding: 0; 
+                margin: 0;
+            }
+            input, select, textarea {
+                border: none !important;
+                background: transparent !important;
+                padding: 2px !important;
+                font-size: 10px !important;
+                color: black !important;
+                font-weight: 700 !important;
+            }
+            select {
+                -webkit-appearance: none;
+                appearance: none;
+                border: none;
+            }
+            .items-table th, .items-table td { 
+                border: 1px solid black !important; 
+            }
+            .vendor-header, .meta-box, .tax-card, .amount-card, .sign-box { 
+                border: 2px solid black !important; 
+            }
+            .print-payment-display {
+                display: block;
+                font-weight: 800;
+                padding: 5px 0;
+            }
+            .screen-payment {
+                display: none;
+            }
+            .vendor-details, .contact-row, .meta-label, .meta-value, .tax-row, .words-box, .sign-box {
+                font-weight: 800 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="invoice-container">
+    <div class="invoice">
+        <!-- HEADER SECTION - Original layout, only heading font size increased to 32px and weight 900 -->
+        <div class="vendor-header">
+            <div class="company-header">
+                <div class="company-icon">
+                    <img src="icon.png" alt="JP Jewellers Logo" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'no-image\'>JP</div>'">
+                </div>
+                <div class="vendor-name">J.P JEWELLERS - Gold & Silver Merchants</div>
+            </div>
+            <div class="vendor-details">
+                <strong>Shop Name:</strong> JP JEWELLERS<br>
+                <strong>Address:</strong> Lalganj, Bairia, Ballia - 277216
+            </div>
+            <div class="contact-row">
+                <strong>Contact:</strong> 9919463098 , 9956624200
+            </div>
+            <!-- Date centered only -->
+            <div class="date-row">
+                <div class="date-box"><strong>DATE:</strong> <span id="invoiceDateDisplay"></span></div>
+            </div>
+        </div>
+
+        <div class="invoice-meta">
+            <!-- BILLING ADDRESS - Only Name, Address, Phone -->
+            <div class="meta-box">
+                <div class="meta-title">BILLING ADDRESS</div>
+                <div class="meta-row"><div class="meta-label">Customer Name *</div><div class="meta-value"><input type="text" id="custName" placeholder="Full Name"></div></div>
+                <div class="meta-row"><div class="meta-label">Address</div><div class="meta-value"><textarea id="custAddress" rows="2" placeholder="Street, City, District"></textarea></div></div>
+                <div class="meta-row"><div class="meta-label">Phone Number</div><div class="meta-value"><input type="tel" id="custPhone" maxlength="10" placeholder="10 digit mobile"></div></div>
+            </div>
+            <!-- SHIPPING DETAILS -->
+            <div class="meta-box">
+                <div class="meta-title">SHIPPING DETAILS</div>
+                <div class="meta-row"><div class="meta-label">Date</div><div class="meta-value"><input type="text" id="billDate" readonly class="disabled-bg"></div></div>
+                <div class="meta-row"><div class="meta-label">Payment Mode</div><div class="meta-value">
+                    <div class="payment-group screen-payment" id="paymentGroup">
+                        <label><input type="checkbox" value="Cash"> Cash</label>
+                        <label><input type="checkbox" value="UPI"> UPI</label>
+                        <label><input type="checkbox" value="Card"> Card</label>
+                        <label><input type="checkbox" value="Bank Transfer"> Bank Transfer</label>
+                        <label><input type="checkbox" value="Net Banking"> Net Banking</label>
+                        <label><input type="checkbox" value="Cheque"> Cheque</label>
+                        <label><input type="checkbox" value="Wallet"> Wallet</label>
+                    </div>
+                    <div class="print-payment-display" id="printPaymentDisplay"></div>
+                </div></div>
+                <div class="meta-row"><div class="meta-label">Place of Supply</div><div class="meta-value"><input type="text" id="placeOfSupply" placeholder="Enter State"></div></div>
+                <div class="meta-row"><div class="meta-label">Discount (₹)</div><div class="meta-value"><input type="number" id="discountAmount" value="0" step="1"></div></div>
+            </div>
+        </div>
+
+        <!-- ITEMS TABLE: Gross Weight, Stone Weight, Net = Gross - Stone -->
+        <div class="items-wrapper">
+            <table class="items-table">
+                <thead>
+                    <tr>
+                        <th>SL</th><th>Item Description</th><th>HSN</th><th>Purity</th><th>Gross Wt (g)</th>
+                        <th>Stone Wt (g)</th><th>Net Wt (g)</th><th>Rate/g (₹)</th><th>Making Type</th><th>Making %/₹</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="invoiceRows"></tbody>
+            </table>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <button class="add-item-btn" id="addItemBtn">+ ADD ITEM</button>
+        </div>
+
+        <!-- BILL SUMMARY - Net Weight Value in Rupees -->
+        <div class="totals-grid">
+            <div class="tax-card">
+                <h5>BILL SUMMARY</h5>
+                <div class="tax-row"><span>TOTAL NET WEIGHT VALUE :</span><span id="totalNetWeightValue">₹0.00</span></div>
+                <div class="tax-row"><span>TOTAL MAKING CHARGES :</span><span id="totalMakingValue">₹0.00</span></div>
+                <div class="tax-row"><span>DISCOUNT :</span><span id="discountShow">₹0.00</span></div>
+                <div class="tax-row grand-total-row"><span>GRAND TOTAL :</span><span id="grandTotalValue">₹0.00</span></div>
+            </div>
+            <div class="amount-card">
+                <h5>AMOUNT IN WORDS</h5>
+                <div class="words-box" id="amountWords">Zero Rupees Only</div>
+            </div>
+        </div>
+
+        <!-- SIGNATURE SECTION -->
+        <div class="signature-footer">
+            <div class="sign-box">
+                CUSTOMER SIGNATURE<br><br>
+                <div class="signature-line">_________________________</div>
+            </div>
+            <div class="sign-box">FOR J.P JEWELLERS<br><br>_________________________<br>AUTHORISED SIGNATORY</div>
+        </div>
+        
+        <!-- FOOTER -->
+        <div style="font-size: 8px; text-align: center; border-top: 1px solid #000; padding-top: 6px; font-weight: 800;">
+            This is a computer generated bill
+        </div>
+
+        <div class="action-bar">
+            
+            <button id="printBtn" class="btn-print">🖨️ PRINT / PDF (A4)</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let itemsData = [];
+
+    const tbody = document.getElementById('invoiceRows');
+    const addBtn = document.getElementById('addItemBtn');
+    const saveBtn = document.getElementById('saveInvoiceBtn');
+    const printBtn = document.getElementById('printBtn');
+    const discountInput = document.getElementById('discountAmount');
+    const totalMakingSpan = document.getElementById('totalMakingValue');
+    const discountShowSpan = document.getElementById('discountShow');
+    const grandTotalSpan = document.getElementById('grandTotalValue');
+    const amountWordsSpan = document.getElementById('amountWords');
+    const totalNetWeightValueSpan = document.getElementById('totalNetWeightValue');
+    const printPaymentDisplay = document.getElementById('printPaymentDisplay');
+
+    function toNumber(val, def=0) { let n = parseFloat(val); return isNaN(n) ? def : n; }
+
+    function updatePrintDisplay() {
+        let selected = [];
+        document.querySelectorAll('#paymentGroup input:checked').forEach(cb => {
+            selected.push(cb.value);
+        });
+        printPaymentDisplay.innerHTML = selected.join(', ') || 'Not Selected';
+    }
+
+    function setInvoiceMeta() {
+        let now = new Date();
+        let y = now.getFullYear();
+        let m = String(now.getMonth()+1).padStart(2,'0');
+        let d = String(now.getDate()).padStart(2,'0');
+        let formattedDate = `${d}/${m}/${y}`;
+        document.getElementById('billDate').value = formattedDate;
+        document.getElementById('invoiceDateDisplay').innerText = formattedDate;
+    }
+
+    // Determine if item is Gold based on purity
+    function isGoldBased(purityValue) {
+        if(!purityValue) return true;
+        const lower = purityValue.toLowerCase();
+        return lower.includes('24k') || lower.includes('22k') || lower.includes('20k') || lower.includes('18k') || lower.includes('14k') || lower === 'gold';
+    }
+
+    // Auto-set making type: Gold = percentage, Silver/other = fixed
+    function updateMakingTypeByMetal(row) {
+        const goldMetal = isGoldBased(row.purity);
+        if(goldMetal) {
+            if(row.makingType !== 'percentage') {
+                row.makingType = 'percentage';
+                if(!row.makingPercent && row.makingPercent !== 0) row.makingPercent = 12;
+                row.makingFixed = 0;
+            }
+        } else {
+            if(row.makingType !== 'fixed') {
+                row.makingType = 'fixed';
+                if(!row.makingFixed && row.makingFixed !== 0) row.makingFixed = 150;
+                row.makingPercent = 0;
+            }
+        }
+    }
+
+    // Calculation: Net Weight = Gross Weight - Stone Weight
+    function calculateRow(row) {
+        let grossWt = toNumber(row.grossWt);
+        let stoneWt = toNumber(row.stoneWt);
+        let netWt = Math.max(0, grossWt - stoneWt);
+        row.netWt = netWt;
+        
+        let rate = toNumber(row.ratePerGram);
+        let netWeightValue = netWt * rate;
+        let metalValue = netWeightValue;
+        
+        let makingValue = 0;
+        if (row.makingType === 'percentage') {
+            let makingPercent = toNumber(row.makingPercent);
+            makingValue = metalValue * (makingPercent / 100);
+        } else {
+            makingValue = toNumber(row.makingFixed);
+        }
+        row.makingValue = makingValue;
+        
+        let stoneValue = stoneWt * rate;
+        row.stoneValue = stoneValue;
+        
+        let total = metalValue + makingValue + stoneValue;
+        row.rowTotal = total;
+        
+        return { metalValue, makingValue, stoneValue, total, netWt, netWeightValue };
+    }
+
+    function recalcAll() {
+        let totalMaking = 0, totalTaxable = 0;
+        let totalNetWeightValue = 0;
+        
+        for(let i=0; i<itemsData.length; i++) {
+            let row = itemsData[i];
+            updateMakingTypeByMetal(row);
+            let result = calculateRow(row);
+            totalMaking += result.makingValue;
+            totalTaxable += result.total;
+            totalNetWeightValue += result.netWeightValue;
+        }
+        
+        let discount = toNumber(discountInput.value);
+        let afterDiscount = totalTaxable - discount;
+        if(afterDiscount < 0) afterDiscount = 0;
+        let grandTotal = afterDiscount;
+        
+        totalMakingSpan.innerHTML = `₹${totalMaking.toFixed(2)}`;
+        discountShowSpan.innerText = `₹${discount.toFixed(2)}`;
+        grandTotalSpan.innerText = `₹${grandTotal.toFixed(2)}`;
+        totalNetWeightValueSpan.innerHTML = `₹${totalNetWeightValue.toFixed(2)}`;
+        
+        amountWordsSpan.innerText = convertToIndianWords(Math.abs(grandTotal));
+        
+        renderTableRows();
+        updatePrintDisplay();
+    }
+
+    function convertToIndianWords(num) {
+        if(num === 0) return "Zero Rupees Only";
+        let rupees = Math.floor(num);
+        let paise = Math.round((num - rupees) * 100);
+        let words = convertNumberToIndian(rupees) + " Rupees";
+        if(paise > 0) words += " and " + convertNumberToIndian(paise) + " Paise";
+        return words + " Only";
+    }
+    
+    function convertNumberToIndian(n) {
+        if(n === 0) return "";
+        const units = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+        const tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+        function underHundred(num) {
+            if(num < 20) return units[num];
+            return tens[Math.floor(num/10)] + (num%10 ? " " + units[num%10] : "");
+        }
+        function convert(num) {
+            if(num === 0) return "";
+            let crore = Math.floor(num/10000000);
+            let lakhRem = num % 10000000;
+            let lakh = Math.floor(lakhRem/100000);
+            let thousandRem = lakhRem % 100000;
+            let thousand = Math.floor(thousandRem/1000);
+            let hundredRem = thousandRem % 1000;
+            let hundred = Math.floor(hundredRem/100);
+            let rest = hundredRem % 100;
+            let result = "";
+            if(crore) result += convert(crore) + " Crore ";
+            if(lakh) result += convert(lakh) + " Lakh ";
+            if(thousand) result += convert(thousand) + " Thousand ";
+            if(hundred) result += units[hundred] + " Hundred ";
+            if(rest) result += underHundred(rest);
+            return result.trim();
+        }
+        return convert(n);
+    }
+
+    function renderTableRows() {
+        tbody.innerHTML = '';
+        if(itemsData.length === 0) {
+            let tr = document.createElement('tr');
+            let td = document.createElement('td');
+            td.colSpan = 11;
+            td.style.textAlign = 'center';
+            td.style.padding = '25px';
+            td.style.fontWeight = 'bold';
+            td.style.color = '#6c757d';
+            td.innerHTML = '— Click "ADD ITEM" to add products —';
+            tr.appendChild(td);
+            tbody.appendChild(tr);
+            return;
+        }
+        
+        for(let idx=0; idx<itemsData.length; idx++) {
+            let row = itemsData[idx];
+            let tr = document.createElement('tr');
+            
+            let tdSl = document.createElement('td');
+            tdSl.innerText = idx+1;
+            tdSl.style.fontWeight = 'bold';
+            tr.appendChild(tdSl);
+            
+            let tdDesc = document.createElement('td');
+            let descInput = document.createElement('input');
+            descInput.type = 'text';
+            descInput.value = row.itemDesc || '';
+            descInput.placeholder = 'Item name';
+            descInput.style.fontWeight = 'bold';
+            descInput.onchange = (function(r) { return function(e) { r.itemDesc = e.target.value; recalcAll(); }; })(row);
+            tdDesc.appendChild(descInput);
+            tr.appendChild(tdDesc);
+            
+            let tdHsn = document.createElement('td');
+            let hsnInput = document.createElement('input');
+            hsnInput.type = 'text';
+            hsnInput.value = row.hsn || '7113';
+            hsnInput.style.width = '55px';
+            hsnInput.onchange = (function(r) { return function(e) { r.hsn = e.target.value; }; })(row);
+            tdHsn.appendChild(hsnInput);
+            tr.appendChild(tdHsn);
+            
+            let tdPurity = document.createElement('td');
+            let puritySelect = document.createElement('select');
+            let purityOptions = ['24K (Gold)', '22K (Gold)', '20K (Gold)', '18K (Gold)', '14K (Gold)', 'Silver 999', 'Silver Ornaments'];
+            purityOptions.forEach(p => {
+                let opt = document.createElement('option');
+                opt.value = p;
+                opt.innerText = p;
+                if(row.purity === p) opt.selected = true;
+                puritySelect.appendChild(opt);
+            });
+            puritySelect.onchange = (function(r) { return function(e) { 
+                r.purity = e.target.value; 
+                updateMakingTypeByMetal(r);
+                recalcAll(); 
+            }; })(row);
+            tdPurity.appendChild(puritySelect);
+            tr.appendChild(tdPurity);
+            
+            let tdGross = document.createElement('td');
+            let grossInput = document.createElement('input');
+            grossInput.type = 'number';
+            grossInput.value = row.grossWt || 0;
+            grossInput.step = '0.01';
+            grossInput.style.width = '55px';
+            grossInput.onchange = (function(r) { return function(e) { r.grossWt = toNumber(e.target.value); recalcAll(); }; })(row);
+            tdGross.appendChild(grossInput);
+            tr.appendChild(tdGross);
+            
+            let tdStone = document.createElement('td');
+            let stoneInput = document.createElement('input');
+            stoneInput.type = 'number';
+            stoneInput.value = row.stoneWt || 0;
+            stoneInput.step = '0.01';
+            stoneInput.style.width = '55px';
+            stoneInput.onchange = (function(r) { return function(e) { r.stoneWt = toNumber(e.target.value); recalcAll(); }; })(row);
+            tdStone.appendChild(stoneInput);
+            tr.appendChild(tdStone);
+            
+            let tdNet = document.createElement('td');
+            tdNet.innerText = (row.netWt || 0).toFixed(3);
+            tdNet.style.fontWeight = 'bold';
+            tr.appendChild(tdNet);
+            
+            let tdRate = document.createElement('td');
+            let rateInput = document.createElement('input');
+            rateInput.type = 'number';
+            rateInput.value = row.ratePerGram || 5800;
+            rateInput.step = '10';
+            rateInput.style.width = '60px';
+            rateInput.onchange = (function(r) { return function(e) { r.ratePerGram = toNumber(e.target.value); recalcAll(); }; })(row);
+            tdRate.appendChild(rateInput);
+            tr.appendChild(tdRate);
+            
+            let tdMakingType = document.createElement('td');
+            let typeSpan = document.createElement('span');
+            typeSpan.style.fontWeight = 'bold';
+            typeSpan.style.background = '#e9ecef';
+            typeSpan.style.padding = '3px 8px';
+            typeSpan.style.borderRadius = '4px';
+            typeSpan.innerText = row.makingType === 'percentage' ? 'Gold %' : 'Fixed ₹';
+            tdMakingType.appendChild(typeSpan);
+            tr.appendChild(tdMakingType);
+            
+            let tdMakingInput = document.createElement('td');
+            let makingInput = document.createElement('input');
+            makingInput.type = 'number';
+            makingInput.step = '0.5';
+            makingInput.style.width = '60px';
+            if (row.makingType === 'percentage') {
+                makingInput.value = row.makingPercent || 12;
+                makingInput.placeholder = '%';
+            } else {
+                makingInput.value = row.makingFixed || 150;
+                makingInput.placeholder = '₹';
+            }
+            makingInput.onchange = (function(r) { return function(e) {
+                let val = toNumber(e.target.value);
+                if (r.makingType === 'percentage') {
+                    r.makingPercent = val;
+                } else {
+                    r.makingFixed = val;
+                }
+                recalcAll();
+            }; })(row);
+            tdMakingInput.appendChild(makingInput);
+            tr.appendChild(tdMakingInput);
+            
+            let tdAction = document.createElement('td');
+            let delBtn = document.createElement('button');
+            delBtn.innerHTML = '✕';
+            delBtn.className = 'delete-btn';
+            delBtn.style.fontWeight = 'bold';
+            delBtn.onclick = (function(i) { return function() { itemsData.splice(i, 1); recalcAll(); }; })(idx);
+            tdAction.appendChild(delBtn);
+            tr.appendChild(tdAction);
+            
+            tbody.appendChild(tr);
+        }
+        
+        for(let i=0; i<itemsData.length && tbody.children[i]; i++) {
+            let cells = tbody.children[i].cells;
+            if(cells.length >= 11) {
+                cells[6].innerText = (itemsData[i].netWt || 0).toFixed(3);
+                let typeSpan = cells[8].querySelector('span');
+                if(typeSpan) typeSpan.innerText = itemsData[i].makingType === 'percentage' ? 'Gold %' : 'Fixed ₹';
+                let makingInput = cells[9].querySelector('input');
+                if(makingInput) {
+                    if(itemsData[i].makingType === 'percentage') {
+                        makingInput.placeholder = '%';
+                        makingInput.value = itemsData[i].makingPercent || 12;
+                    } else {
+                        makingInput.placeholder = '₹';
+                        makingInput.value = itemsData[i].makingFixed || 150;
+                    }
+                }
+            }
+        }
+    }
+
+    function addNewItem() {
+        let newItem = {
+            itemDesc: '', hsn: '7113', purity: '22K (Gold)',
+            grossWt: 0, stoneWt: 0, netWt: 0,
+            ratePerGram: 5800, makingType: 'percentage', makingPercent: 12, makingFixed: 150,
+            makingValue: 0, stoneValue: 0, rowTotal: 0
+        };
+        updateMakingTypeByMetal(newItem);
+        itemsData.push(newItem);
+        recalcAll();
+    }
+    
+    function saveInvoiceToLocalStorage() {
+        let custName = document.getElementById('custName').value.trim();
+        if(custName === '') { alert('Please enter Customer Name'); return false; }
+        let msg = document.createElement('div');
+        msg.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#28a745;color:white;padding:10px 18px;border-radius:5px;z-index:1000;font-size:12px;font-weight:bold;';
+        msg.innerHTML = '✓ Invoice saved successfully!';
+        document.body.appendChild(msg);
+        setTimeout(() => msg.remove(), 2000);
+        return true;
+    }
+    
+    function validateAndPrint() {
+        let name = document.getElementById('custName').value.trim();
+        if(name === '') { alert('Please enter Customer Name before printing'); return false; }
+        if(itemsData.length === 0) { alert('Please add at least one item before printing'); return false; }
+        updatePrintDisplay();
+        window.print();
+        return true;
+    }
+    
+    addBtn.onclick = addNewItem;
+    saveBtn.onclick = saveInvoiceToLocalStorage;
+    printBtn.onclick = validateAndPrint;
+    discountInput.onchange = recalcAll;
+    
+    document.querySelectorAll('#paymentGroup input').forEach(cb => {
+        cb.onchange = updatePrintDisplay;
+    });
+    
+    setInvoiceMeta();
+    itemsData = [];
+    recalcAll();
+    updatePrintDisplay();
+</script>
+</body>
+</html>
