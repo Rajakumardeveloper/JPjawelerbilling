@@ -407,12 +407,13 @@
         <div style="font-size: 7px; text-align: center; border-top: 1px solid #ccc; padding-top: 5px; font-weight: 600;">This is a computer generated bill</div>
 
         <div class="action-bar">
-            <button id="saveInvoiceBtn" class="btn-save">💾 Save Invoice</button>
-            <button id="printBtn" class="btn-print">🖨️ Print / PDF</button>
+            <button id="saveInvoiceBtn" class="btn-save">💾 Save as PDF</button>
+            <button id="printBtn" class="btn-print">🖨️ Print</button>
         </div>
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     let itemsData = [];
     const tbody = document.getElementById('invoiceRows');
@@ -426,36 +427,30 @@
         document.getElementById('invoiceDateDisplay').innerText = f;
     }
 
-    // Check if purity is Gold (including Gold Ornaments)
     function isGold(purity) {
         if(!purity) return false;
         let p = purity.toLowerCase();
         return p.includes('24k') || p.includes('22k') || p.includes('18k') || p.includes('14k') || p.includes('9k') || p.includes('gold ornaments') || p.includes('gold');
     }
 
-    // Check if purity is Silver
     function isSilver(purity) {
         if(!purity) return false;
         let p = purity.toLowerCase();
         return p.includes('silver');
     }
 
-    // Auto-update making type based on purity selection
     function updateMakingTypeByPurity(row) {
         if(isGold(row.purity)) {
-            // Gold items: Set to percentage (Gold %)
             if(row.makingType !== 'percentage') {
                 row.makingType = 'percentage';
                 if(!row.makingPercent || row.makingPercent === 0) row.makingPercent = 12;
             }
         } else if(isSilver(row.purity)) {
-            // Silver items: Set to fixed (Fixed ₹)
             if(row.makingType !== 'fixed') {
                 row.makingType = 'fixed';
                 if(!row.makingFixed || row.makingFixed === 0) row.makingFixed = 150;
             }
         }
-        // For other purities, keep existing making type
     }
 
     function calculate() {
@@ -532,7 +527,6 @@
             let tr = tbody.insertRow();
             tr.insertCell().innerText = i+1;
             
-            // Item Description
             let td1 = tr.insertCell();
             let inpDesc = document.createElement('input');
             inpDesc.type = 'text';
@@ -541,7 +535,6 @@
             inpDesc.onchange = (function(r){return function(e){r.itemDesc=e.target.value;calculate();}})(row);
             td1.appendChild(inpDesc);
             
-            // Purity - When changed, auto-update making type
             let td2 = tr.insertCell();
             let selPur = document.createElement('select');
             let purityOptions = ['24K (Gold)','22K (Gold)','18K (Gold)','14K (Gold)','9K (Gold)','Gold Ornaments','Silver 999','Silver Ornaments'];
@@ -552,15 +545,13 @@
                 if(row.purity === p) opt.selected = true;
                 selPur.appendChild(opt);
             });
-            selPur.onchange = (function(r, idx){return function(e){
+            selPur.onchange = (function(r){return function(e){
                 r.purity = e.target.value;
-                // Auto-update making type based on new purity
                 updateMakingTypeByPurity(r);
                 calculate();
-            }})(row, i);
+            }})(row);
             td2.appendChild(selPur);
             
-            // Gross Weight
             let td3 = tr.insertCell();
             let inpGr = document.createElement('input');
             inpGr.type = 'number';
@@ -571,7 +562,6 @@
             inpGr.onchange = (function(r){return function(e){r.grossWt=toNumber(e.target.value);calculate();}})(row);
             td3.appendChild(inpGr);
             
-            // Stone Weight
             let td4 = tr.insertCell();
             let inpSt = document.createElement('input');
             inpSt.type = 'number';
@@ -582,13 +572,11 @@
             inpSt.onchange = (function(r){return function(e){r.stoneWt=toNumber(e.target.value);calculate();}})(row);
             td4.appendChild(inpSt);
             
-            // Net Weight (calculated display)
             let td5 = tr.insertCell();
             let netDisplay = Math.max(0, toNumber(row.grossWt) - toNumber(row.stoneWt)).toFixed(3);
             td5.innerText = netDisplay;
             td5.style.fontWeight = 'bold';
             
-            // Rate per gram
             let td6 = tr.insertCell();
             let inpRate = document.createElement('input');
             inpRate.type = 'number';
@@ -599,7 +587,6 @@
             inpRate.onchange = (function(r){return function(e){r.ratePerGram=toNumber(e.target.value);calculate();}})(row);
             td6.appendChild(inpRate);
             
-            // Making Type - User can manually change if needed, but auto-set by purity
             let td7 = tr.insertCell();
             let selType = document.createElement('select');
             selType.style.width = '70px';
@@ -618,7 +605,6 @@
             }})(row);
             td7.appendChild(selType);
             
-            // Making value (percentage or fixed)
             let td8 = tr.insertCell();
             let inpMake = document.createElement('input');
             inpMake.type = 'number';
@@ -639,7 +625,6 @@
             }})(row);
             td8.appendChild(inpMake);
             
-            // Delete button
             let td9 = tr.insertCell();
             let delBtn = document.createElement('button');
             delBtn.innerHTML = '❌';
@@ -665,22 +650,60 @@
         document.getElementById('printPaymentDisplay').innerHTML = selected.join(', ') || 'Not Selected';
     }
 
-    function saveInvoice() {
-        if(document.getElementById('custName').value.trim() === '') { alert('Please enter Customer Name'); return false; }
-        alert('Invoice saved successfully!');
-        return true;
+    // Save as PDF function using html2pdf
+    function saveAsPDF() {
+        let custName = document.getElementById('custName').value.trim();
+        if(custName === '') { 
+            alert('Please enter Customer Name before saving PDF'); 
+            return false; 
+        }
+        if(itemsData.length === 0) { 
+            alert('Please add at least one item before saving PDF'); 
+            return false; 
+        }
+        
+        // Get the invoice element
+        const element = document.querySelector('.invoice-container');
+        
+        // Options for PDF
+        const opt = {
+            margin: [0.5, 0.5, 0.5, 0.5],
+            filename: `Invoice_${custName.replace(/\s/g, '_')}_${document.getElementById('invoiceDateDisplay').innerText}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, letterRendering: true, useCORS: true, logging: false },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        };
+        
+        // Show loading message
+        let loadingMsg = document.createElement('div');
+        loadingMsg.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1e466e;color:white;padding:15px 30px;border-radius:8px;z-index:9999;font-size:14px;font-weight:bold;box-shadow:0 4px 15px rgba(0,0,0,0.3);';
+        loadingMsg.innerHTML = 'Generating PDF... Please wait';
+        document.body.appendChild(loadingMsg);
+        
+        // Generate PDF
+        html2pdf().set(opt).from(element).save().then(() => {
+            document.body.removeChild(loadingMsg);
+            let successMsg = document.createElement('div');
+            successMsg.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#28a745;color:white;padding:12px 20px;border-radius:5px;z-index:1000;font-size:12px;font-weight:bold;';
+            successMsg.innerHTML = '✓ PDF downloaded successfully!';
+            document.body.appendChild(successMsg);
+            setTimeout(() => successMsg.remove(), 3000);
+        }).catch(() => {
+            document.body.removeChild(loadingMsg);
+            alert('Error generating PDF. Please try again.');
+        });
     }
 
     function printInvoice() {
-        if(document.getElementById('custName').value.trim() === '') { alert('Please enter Customer Name'); return false; }
-        if(itemsData.length === 0) { alert('Please add at least one item'); return false; }
+        if(document.getElementById('custName').value.trim() === '') { alert('Please enter Customer Name before printing'); return false; }
+        if(itemsData.length === 0) { alert('Please add at least one item before printing'); return false; }
         updatePrintPayment();
         window.print();
         return true;
     }
 
     document.getElementById('addItemBtn').onclick = addItem;
-    document.getElementById('saveInvoiceBtn').onclick = saveInvoice;
+    document.getElementById('saveInvoiceBtn').onclick = saveAsPDF;
     document.getElementById('printBtn').onclick = printInvoice;
     discountInput.onchange = calculate;
     document.querySelectorAll('#paymentGroup input').forEach(cb => cb.onchange = updatePrintPayment);
