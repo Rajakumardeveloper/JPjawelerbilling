@@ -69,9 +69,9 @@
             color: white;
             font-weight: bold;
         }
-        /* ULTRA BOLDER HEADING - Maximum font weight and increased size */
+        /* ULTRA BOLDER HEADING */
         .vendor-name {
-            font-size: 26px;
+            font-size: 34px;
             font-weight: 900;
             color: #1e466e;
             letter-spacing: 1.5px;
@@ -92,7 +92,7 @@
             font-weight: 800;
             color: #1e466e;
         }
-        /* Date row - centered only the date element */
+        /* Date row - centered only the date element, no emoji */
         .date-row {
             display: flex;
             justify-content: center;
@@ -331,7 +331,7 @@
         .btn-print { background: #1e466e; }
         .btn-print:hover { background: #163a5a; }
 
-        /* Print Styles */
+        /* Print Styles - Making type visible in print */
         @media print {
             @page { 
                 size: A4; 
@@ -383,19 +383,29 @@
                 font-size: 34px !important;
                 font-weight: 900 !important;
             }
+            /* Making type span visible in print */
+            .items-table td span {
+                display: inline-block !important;
+                visibility: visible !important;
+            }
+            /* Ensure making type text is visible */
+            .making-type-print {
+                font-weight: 900 !important;
+                background: #e9ecef !important;
+                padding: 3px 8px !important;
+                border-radius: 4px !important;
+            }
         }
     </style>
 </head>
 <body>
 <div class="invoice-container">
     <div class="invoice">
-        <!-- HEADER SECTION - Original layout, heading ultra bolder font -->
+        <!-- HEADER SECTION - No emoji in date -->
         <div class="vendor-header">
             <div class="company-header">
                 <div class="company-icon">
-                    <div class="image">
-                        <img src="icon.png">
-                    </div>
+                    <img src="icon.png" alt="JP Jewellers Logo" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'no-image\'>JP</div>'">
                 </div>
                 <div class="vendor-name">J.P JEWELLERS - Gold & Silver Merchants</div>
             </div>
@@ -406,14 +416,14 @@
             <div class="contact-row">
                 <strong>Contact:</strong> 9919463098 , 9956624200
             </div>
-            <!-- Date centered only - Fixed with proper ID and inline display -->
+            <!-- Date centered only - No emoji -->
             <div class="date-row">
                 <div class="date-box"><strong>DATE:</strong> <span id="headerDateDisplay">--/--/----</span></div>
             </div>
         </div>
 
         <div class="invoice-meta">
-            <!-- BILLING ADDRESS - Only Name, Address, Phone -->
+            <!-- BILLING ADDRESS -->
             <div class="meta-box">
                 <div class="meta-title">BILLING ADDRESS</div>
                 <div class="meta-row"><div class="meta-label">Customer Name *</div><div class="meta-value"><input type="text" id="custName" placeholder="Full Name"></div></div>
@@ -441,7 +451,7 @@
             </div>
         </div>
 
-        <!-- ITEMS TABLE: Gross Weight, Stone Weight, Net = Gross - Stone -->
+        <!-- ITEMS TABLE -->
         <div class="items-wrapper">
             <table class="items-table">
                 <thead>
@@ -458,12 +468,14 @@
             <button class="add-item-btn" id="addItemBtn">+ ADD ITEM</button>
         </div>
 
-        <!-- BILL SUMMARY - Net Weight Value in Rupees -->
+        <!-- BILL SUMMARY - Fixed Grand Total calculation -->
         <div class="totals-grid">
             <div class="tax-card">
                 <h5>BILL SUMMARY</h5>
                 <div class="tax-row"><span>TOTAL NET WEIGHT VALUE :</span><span id="totalNetWeightValue">₹0.00</span></div>
                 <div class="tax-row"><span>TOTAL MAKING CHARGES :</span><span id="totalMakingValue">₹0.00</span></div>
+                <div class="tax-row"><span>TOTAL STONE VALUE :</span><span id="totalStoneValue">₹0.00</span></div>
+                <div class="tax-row"><span>SUB TOTAL :</span><span id="subTotalValue">₹0.00</span></div>
                 <div class="tax-row"><span>DISCOUNT :</span><span id="discountShow">₹0.00</span></div>
                 <div class="tax-row grand-total-row"><span>GRAND TOTAL :</span><span id="grandTotalValue">₹0.00</span></div>
             </div>
@@ -488,8 +500,8 @@
         </div>
 
         <div class="action-bar">
-            <button id="saveInvoiceBtn" class="btn-save">💾 SAVE INVOICE</button>
-            <button id="printBtn" class="btn-print">🖨️ PRINT / PDF (A4)</button>
+            <button id="saveInvoiceBtn" class="btn-save">SAVE INVOICE</button>
+            <button id="printBtn" class="btn-print">PRINT / PDF</button>
         </div>
     </div>
 </div>
@@ -503,7 +515,9 @@
     const printBtn = document.getElementById('printBtn');
     const discountInput = document.getElementById('discountAmount');
     const totalMakingSpan = document.getElementById('totalMakingValue');
+    const totalStoneSpan = document.getElementById('totalStoneValue');
     const discountShowSpan = document.getElementById('discountShow');
+    const subTotalSpan = document.getElementById('subTotalValue');
     const grandTotalSpan = document.getElementById('grandTotalValue');
     const amountWordsSpan = document.getElementById('amountWords');
     const totalNetWeightValueSpan = document.getElementById('totalNetWeightValue');
@@ -526,27 +540,23 @@
         let d = String(now.getDate()).padStart(2,'0');
         let formattedDate = `${d}/${m}/${y}`;
         
-        // Set date in shipping details section
         let billDateInput = document.getElementById('billDate');
         if(billDateInput) {
             billDateInput.value = formattedDate;
         }
         
-        // Set date in header centered box
         let headerDateSpan = document.getElementById('headerDateDisplay');
         if(headerDateSpan) {
             headerDateSpan.innerText = formattedDate;
         }
     }
 
-    // Determine if item is Gold based on purity
     function isGoldBased(purityValue) {
         if(!purityValue) return true;
         const lower = purityValue.toLowerCase();
         return lower.includes('24k') || lower.includes('22k') || lower.includes('20k') || lower.includes('18k') || lower.includes('14k') || lower === 'gold';
     }
 
-    // Auto-set making type: Gold = percentage, Silver/other = fixed
     function updateMakingTypeByMetal(row) {
         const goldMetal = isGoldBased(row.purity);
         if(goldMetal) {
@@ -564,7 +574,6 @@
         }
     }
 
-    // Calculation: Net Weight = Gross Weight - Stone Weight
     function calculateRow(row) {
         let grossWt = toNumber(row.grossWt);
         let stoneWt = toNumber(row.stoneWt);
@@ -594,7 +603,7 @@
     }
 
     function recalcAll() {
-        let totalMaking = 0, totalTaxable = 0;
+        let totalMaking = 0, totalStone = 0, totalTaxable = 0;
         let totalNetWeightValue = 0;
         
         for(let i=0; i<itemsData.length; i++) {
@@ -602,6 +611,7 @@
             updateMakingTypeByMetal(row);
             let result = calculateRow(row);
             totalMaking += result.makingValue;
+            totalStone += result.stoneValue;
             totalTaxable += result.total;
             totalNetWeightValue += result.netWeightValue;
         }
@@ -612,7 +622,9 @@
         let grandTotal = afterDiscount;
         
         totalMakingSpan.innerHTML = `₹${totalMaking.toFixed(2)}`;
+        totalStoneSpan.innerHTML = `₹${totalStone.toFixed(2)}`;
         discountShowSpan.innerText = `₹${discount.toFixed(2)}`;
+        subTotalSpan.innerText = `₹${totalTaxable.toFixed(2)}`;
         grandTotalSpan.innerText = `₹${grandTotal.toFixed(2)}`;
         totalNetWeightValueSpan.innerHTML = `₹${totalNetWeightValue.toFixed(2)}`;
         
@@ -759,10 +771,12 @@
             
             let tdMakingType = document.createElement('td');
             let typeSpan = document.createElement('span');
-            typeSpan.style.fontWeight = 'bold';
+            typeSpan.style.fontWeight = '900';
             typeSpan.style.background = '#e9ecef';
-            typeSpan.style.padding = '3px 8px';
+            typeSpan.style.padding = '4px 8px';
             typeSpan.style.borderRadius = '4px';
+            typeSpan.style.display = 'inline-block';
+            typeSpan.className = 'making-type-print';
             typeSpan.innerText = row.makingType === 'percentage' ? 'Gold %' : 'Fixed ₹';
             tdMakingType.appendChild(typeSpan);
             tr.appendChild(tdMakingType);
@@ -840,7 +854,7 @@
         if(custName === '') { alert('Please enter Customer Name'); return false; }
         let msg = document.createElement('div');
         msg.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#28a745;color:white;padding:10px 18px;border-radius:5px;z-index:1000;font-size:12px;font-weight:bold;';
-        msg.innerHTML = '✓ Invoice saved successfully!';
+        msg.innerHTML = 'Invoice saved successfully!';
         document.body.appendChild(msg);
         setTimeout(() => msg.remove(), 2000);
         return true;
@@ -864,7 +878,6 @@
         cb.onchange = updatePrintDisplay;
     });
     
-    // Initialize everything
     setInvoiceMeta();
     itemsData = [];
     recalcAll();
