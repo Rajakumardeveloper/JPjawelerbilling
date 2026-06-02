@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JP Jewellers | Ultra Bold Invoice</title>
+    <title>JP Jewellers | GST Tax Invoice</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
 
         body {
             background: #eef2f5;
-            font-family: 'Segoe UI', 'Arial', 'Helvetica', sans-serif;
+            font-family: 'Arial', 'Helvetica', 'Segoe UI', sans-serif;
             padding: 15px;
             display: flex;
             justify-content: center;
@@ -34,9 +34,8 @@
             z-index: 1;
         }
 
-        /* HEADER SECTION - Original layout, heading ultra bolder */
         .vendor-header {
-            border: 2px solid #000;
+            border: 1px solid #000;
             padding: 12px 15px;
             margin-bottom: 18px;
             background: #fefefe;
@@ -69,47 +68,35 @@
             color: white;
             font-weight: bold;
         }
-        /* ULTRA BOLDER HEADING */
         .vendor-name {
-            font-size: 34px;
+            font-size: 28px;
             font-weight: 900;
             color: #1e466e;
-            letter-spacing: 1.5px;
-            text-shadow: 1px 1px 0px rgba(0,0,0,0.08);
-            font-family: 'Segoe UI', 'Arial Black', 'Arial', sans-serif;
+            letter-spacing: 1px;
         }
         
         .vendor-details {
-            font-size: 11px;
-            line-height: 1.5;
-            color: #1a1a1a;
+            font-size: 10px;
+            line-height: 1.4;
+            color: #2c3e50;
             margin-top: 5px;
             font-weight: 700;
         }
         .contact-row {
             margin-top: 6px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 800;
             color: #1e466e;
         }
-        /* Date row - centered only the date element, no emoji */
-        .date-row {
+        .row-flex {
             display: flex;
-            justify-content: center;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 15px;
             margin-top: 8px;
-            padding-top: 8px;
-            border-top: 1px dashed #ccc;
-        }
-        .date-box {
-            background: #f0f2f5;
-            padding: 4px 20px;
-            border-radius: 4px;
-            font-weight: 800;
-            font-size: 13px;
-            display: inline-block;
+            font-weight: 700;
         }
 
-        /* Box system for meta sections */
         .invoice-meta {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -117,40 +104,38 @@
             margin-bottom: 18px;
         }
         .meta-box {
-            border: 2px solid #000;
+            border: 1px solid #000;
             padding: 10px 12px;
             background: white;
         }
         .meta-title {
             font-weight: 900;
-            font-size: 13px;
+            font-size: 12px;
             background: #f0f2f5;
-            padding: 5px 8px;
-            margin: -10px -12px 12px -12px;
-            border-bottom: 2px solid #000;
-            letter-spacing: 0.3px;
+            padding: 4px 8px;
+            margin: -10px -12px 10px -12px;
+            border-bottom: 1px solid #000;
         }
         .meta-row {
             display: flex;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-size: 11px;
             align-items: center;
         }
         .meta-label {
-            width: 110px;
+            width: 100px;
             font-weight: 800;
-            font-size: 11px;
+            font-size: 10px;
         }
         .meta-value {
             flex: 1;
         }
         .meta-value input, .meta-value select, .meta-value textarea {
             width: 100%;
-            padding: 5px 6px;
-            border: 1px solid #333;
-            font-size: 11px;
-            font-weight: 600;
-            background: #fff;
+            padding: 4px 6px;
+            border: 1px solid #aaa;
+            font-size: 10px;
+            font-weight: normal;
         }
         
         .payment-group {
@@ -163,7 +148,7 @@
             display: flex;
             align-items: center;
             gap: 4px;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 700;
             cursor: pointer;
         }
@@ -176,9 +161,8 @@
             display: none;
         }
 
-        /* Items Table */
         .items-wrapper {
-            border: 2px solid #000;
+            border: 1px solid #000;
             margin: 15px 0;
             overflow-x: auto;
             background: white;
@@ -186,42 +170,41 @@
         .items-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 10px;
+            font-size: 9px;
         }
         .items-table th, .items-table td {
             border: 1px solid #000;
-            padding: 7px 4px;
+            padding: 6px 4px;
             text-align: center;
             vertical-align: middle;
         }
         .items-table th {
             background: #e9ecef;
             font-weight: 900;
-            font-size: 10px;
-            padding: 8px 3px;
+            font-size: 8px;
+            padding: 6px 3px;
         }
         .items-table input, .items-table select {
             width: 100%;
-            padding: 4px;
-            border: 1px solid #333;
-            font-size: 10px;
+            padding: 3px;
+            border: 1px solid #ccc;
+            font-size: 9px;
             text-align: center;
-            font-weight: 600;
+            font-weight: normal;
         }
         .making-select {
             width: 75px !important;
-            padding: 4px;
-            font-size: 9px;
-            font-weight: 600;
+            padding: 3px;
+            font-size: 8px;
         }
         .delete-btn {
             background: #dc3545;
             color: white;
             border: none;
-            padding: 5px 10px;
+            padding: 5px 8px;
             border-radius: 3px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
         }
         .delete-btn:hover {
@@ -231,15 +214,14 @@
             background: #28a745;
             color: white;
             border: none;
-            padding: 7px 16px;
-            border-radius: 4px;
+            padding: 6px 14px;
+            border-radius: 3px;
             cursor: pointer;
-            font-size: 11px;
+            font-size: 10px;
             margin-right: auto;
-            font-weight: 800;
+            font-weight: bold;
         }
 
-        /* Totals sections */
         .totals-grid {
             display: grid;
             grid-template-columns: 1fr 1.2fr;
@@ -247,64 +229,60 @@
             margin: 15px 0;
         }
         .tax-card, .amount-card {
-            border: 2px solid #000;
+            border: 1px solid #000;
             padding: 10px 12px;
             background: white;
         }
         .tax-card h5, .amount-card h5 {
             background: #e9ecef;
-            margin: -10px -12px 12px -12px;
-            padding: 7px 10px;
-            border-bottom: 2px solid #000;
-            font-size: 13px;
+            margin: -10px -12px 10px -12px;
+            padding: 6px 10px;
+            border-bottom: 1px solid #000;
+            font-size: 11px;
             font-weight: 900;
         }
         .tax-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 11px;
-            font-weight: 800;
+            margin-bottom: 6px;
+            font-size: 10px;
+            font-weight: 700;
         }
         .grand-total-row {
             border-top: 2px solid #000;
-            margin-top: 10px;
-            padding-top: 8px;
+            margin-top: 8px;
+            padding-top: 6px;
             font-weight: 900;
-            font-size: 14px;
+            font-size: 13px;
         }
         .words-box {
             background: #f8f9fa;
-            padding: 10px;
+            padding: 8px;
             margin-top: 10px;
-            font-size: 11px;
-            font-weight: 800;
-            border-left: 4px solid #1e466e;
+            font-size: 10px;
+            font-weight: 700;
+            border-left: 3px solid #1e466e;
         }
 
-        /* Signature footer */
         .signature-footer {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 18px;
             margin: 20px 0 15px;
-            border-top: 2px solid #000;
+            border-top: 1px solid #000;
             padding-top: 15px;
             background: white;
         }
         .sign-box {
-            border: 2px solid #000;
-            padding: 14px;
-            min-height: 80px;
+            border: 1px solid #000;
+            padding: 12px;
+            min-height: 70px;
             text-align: center;
-            font-size: 11px;
-            font-weight: 800;
-            background: white;
+            font-size: 10px;
+            font-weight: 700;
         }
         .signature-line {
-            margin-top: 18px;
-            font-size: 10px;
-            font-weight: normal;
+            margin-top: 15px;
         }
 
         .action-bar {
@@ -319,9 +297,9 @@
         button {
             color: white;
             border: none;
-            padding: 8px 20px;
+            padding: 8px 18px;
             border-radius: 5px;
-            font-weight: 800;
+            font-weight: 700;
             cursor: pointer;
             font-size: 11px;
             transition: all 0.2s;
@@ -331,7 +309,6 @@
         .btn-print { background: #1e466e; }
         .btn-print:hover { background: #163a5a; }
 
-        /* Print Styles - Making type visible in print */
         @media print {
             @page { 
                 size: A4; 
@@ -352,8 +329,8 @@
             input, select, textarea {
                 border: none !important;
                 background: transparent !important;
-                padding: 2px !important;
-                font-size: 10px !important;
+                padding: 0 !important;
+                font-size: 9px !important;
                 color: black !important;
                 font-weight: 700 !important;
             }
@@ -366,34 +343,18 @@
                 border: 1px solid black !important; 
             }
             .vendor-header, .meta-box, .tax-card, .amount-card, .sign-box { 
-                border: 2px solid black !important; 
+                border: 1px solid black !important; 
             }
             .print-payment-display {
                 display: block;
-                font-weight: 800;
+                font-weight: 700;
                 padding: 5px 0;
             }
             .screen-payment {
                 display: none;
             }
-            .vendor-details, .contact-row, .meta-label, .meta-value, .tax-row, .words-box, .sign-box {
-                font-weight: 800 !important;
-            }
-            .vendor-name {
-                font-size: 34px !important;
-                font-weight: 900 !important;
-            }
-            /* Making type span visible in print */
-            .items-table td span {
-                display: inline-block !important;
-                visibility: visible !important;
-            }
-            /* Ensure making type text is visible */
-            .making-type-print {
-                font-weight: 900 !important;
-                background: #e9ecef !important;
-                padding: 3px 8px !important;
-                border-radius: 4px !important;
+            .vendor-details, .contact-row, .row-flex, .meta-label, .meta-value, .tax-row, .words-box, .sign-box {
+                font-weight: 700 !important;
             }
         }
     </style>
@@ -401,7 +362,6 @@
 <body>
 <div class="invoice-container">
     <div class="invoice">
-        <!-- HEADER SECTION - No emoji in date -->
         <div class="vendor-header">
             <div class="company-header">
                 <div class="company-icon">
@@ -410,30 +370,27 @@
                 <div class="vendor-name">J.P JEWELLERS - Gold & Silver Merchants</div>
             </div>
             <div class="vendor-details">
-                <strong>Shop Name:</strong> JP JEWELLERS<br>
+                <strong>Sold By:</strong> JP JEWELLERS<br>
                 <strong>Address:</strong> Lalganj, Bairia, Ballia - 277216
             </div>
             <div class="contact-row">
                 <strong>Contact:</strong> 9919463098 , 9956624200
             </div>
-            <!-- Date centered only - No emoji -->
-            <div class="date-row">
-                <div class="date-box"><strong>DATE:</strong> <span id="headerDateDisplay">--/--/----</span></div>
+            <div class="row-flex">
+                <span><strong>DATE:</strong> <span id="invoiceDateDisplay"></span></span>
             </div>
         </div>
 
         <div class="invoice-meta">
-            <!-- BILLING ADDRESS -->
             <div class="meta-box">
-                <div class="meta-title">BILLING ADDRESS</div>
+                <div class="meta-title">Billing Address</div>
                 <div class="meta-row"><div class="meta-label">Customer Name *</div><div class="meta-value"><input type="text" id="custName" placeholder="Full Name"></div></div>
                 <div class="meta-row"><div class="meta-label">Address</div><div class="meta-value"><textarea id="custAddress" rows="2" placeholder="Street, City, District"></textarea></div></div>
                 <div class="meta-row"><div class="meta-label">Phone Number</div><div class="meta-value"><input type="tel" id="custPhone" maxlength="10" placeholder="10 digit mobile"></div></div>
             </div>
-            <!-- SHIPPING DETAILS -->
             <div class="meta-box">
-                <div class="meta-title">SHIPPING DETAILS</div>
-                <div class="meta-row"><div class="meta-label">Date</div><div class="meta-value"><input type="text" id="billDate" readonly class="disabled-bg"></div></div>
+                <div class="meta-title">Shipping Details</div>
+                <div class="meta-row"><div class="meta-label">Date</div><div class="meta-value"><input type="text" id="billDate" readonly></div></div>
                 <div class="meta-row"><div class="meta-label">Payment Mode</div><div class="meta-value">
                     <div class="payment-group screen-payment" id="paymentGroup">
                         <label><input type="checkbox" value="Cash"> Cash</label>
@@ -451,7 +408,6 @@
             </div>
         </div>
 
-        <!-- ITEMS TABLE -->
         <div class="items-wrapper">
             <table class="items-table">
                 <thead>
@@ -465,43 +421,39 @@
             </table>
         </div>
         <div style="margin-bottom: 10px;">
-            <button class="add-item-btn" id="addItemBtn">+ ADD ITEM</button>
+            <button class="add-item-btn" id="addItemBtn">+ Add Item</button>
         </div>
 
-        <!-- BILL SUMMARY - Fixed Grand Total calculation -->
         <div class="totals-grid">
             <div class="tax-card">
-                <h5>BILL SUMMARY</h5>
-                <div class="tax-row"><span>TOTAL NET WEIGHT VALUE :</span><span id="totalNetWeightValue">₹0.00</span></div>
-                <div class="tax-row"><span>TOTAL MAKING CHARGES :</span><span id="totalMakingValue">₹0.00</span></div>
-                <div class="tax-row"><span>TOTAL STONE VALUE :</span><span id="totalStoneValue">₹0.00</span></div>
-                <div class="tax-row"><span>SUB TOTAL :</span><span id="subTotalValue">₹0.00</span></div>
-                <div class="tax-row"><span>DISCOUNT :</span><span id="discountShow">₹0.00</span></div>
+                <h5>Bill Summary</h5>
+                <div class="tax-row"><span>Total Net Weight (g) :</span><span id="totalNetWeightGrams">0.000 g</span></div>
+                <div class="tax-row"><span>Total Net Value :</span><span id="totalNetValue">₹0.00</span></div>
+                <div class="tax-row"><span>Total Making Charges :</span><span id="totalMakingValue">₹0.00</span></div>
+                <div class="tax-row"><span>Sub Total :</span><span id="subTotalValue">₹0.00</span></div>
+                <div class="tax-row"><span>Discount :</span><span id="discountShow">₹0.00</span></div>
                 <div class="tax-row grand-total-row"><span>GRAND TOTAL :</span><span id="grandTotalValue">₹0.00</span></div>
             </div>
             <div class="amount-card">
-                <h5>AMOUNT IN WORDS</h5>
+                <h5>Amount in Words</h5>
                 <div class="words-box" id="amountWords">Zero Rupees Only</div>
             </div>
         </div>
 
-        <!-- SIGNATURE SECTION -->
         <div class="signature-footer">
             <div class="sign-box">
-                CUSTOMER SIGNATURE<br><br>
+                Customer Signature<br><br>
                 <div class="signature-line">_________________________</div>
             </div>
-            <div class="sign-box">FOR J.P JEWELLERS<br><br>_________________________<br>AUTHORISED SIGNATORY</div>
+            <div class="sign-box">For J.P JEWELLERS<br><br>_________________________<br>Authorised Signatory</div>
         </div>
-        
-        <!-- FOOTER -->
-        <div style="font-size: 8px; text-align: center; border-top: 1px solid #000; padding-top: 6px; font-weight: 800;">
+        <div style="font-size: 7px; text-align: center; border-top: 1px solid #ccc; padding-top: 5px; font-weight: 700;">
             This is a computer generated bill
         </div>
 
         <div class="action-bar">
-            <button id="saveInvoiceBtn" class="btn-save">SAVE INVOICE</button>
-            <button id="printBtn" class="btn-print">PRINT / PDF</button>
+            <button id="saveInvoiceBtn" class="btn-save">💾 Save Invoice</button>
+            <button id="printBtn" class="btn-print">🖨️ Print / PDF (A4)</button>
         </div>
     </div>
 </div>
@@ -514,13 +466,13 @@
     const saveBtn = document.getElementById('saveInvoiceBtn');
     const printBtn = document.getElementById('printBtn');
     const discountInput = document.getElementById('discountAmount');
+    const totalNetWeightGramsSpan = document.getElementById('totalNetWeightGrams');
+    const totalNetValueSpan = document.getElementById('totalNetValue');
     const totalMakingSpan = document.getElementById('totalMakingValue');
-    const totalStoneSpan = document.getElementById('totalStoneValue');
     const discountShowSpan = document.getElementById('discountShow');
     const subTotalSpan = document.getElementById('subTotalValue');
     const grandTotalSpan = document.getElementById('grandTotalValue');
     const amountWordsSpan = document.getElementById('amountWords');
-    const totalNetWeightValueSpan = document.getElementById('totalNetWeightValue');
     const printPaymentDisplay = document.getElementById('printPaymentDisplay');
 
     function toNumber(val, def=0) { let n = parseFloat(val); return isNaN(n) ? def : n; }
@@ -539,22 +491,14 @@
         let m = String(now.getMonth()+1).padStart(2,'0');
         let d = String(now.getDate()).padStart(2,'0');
         let formattedDate = `${d}/${m}/${y}`;
-        
-        let billDateInput = document.getElementById('billDate');
-        if(billDateInput) {
-            billDateInput.value = formattedDate;
-        }
-        
-        let headerDateSpan = document.getElementById('headerDateDisplay');
-        if(headerDateSpan) {
-            headerDateSpan.innerText = formattedDate;
-        }
+        document.getElementById('billDate').value = formattedDate;
+        document.getElementById('invoiceDateDisplay').innerText = formattedDate;
     }
 
     function isGoldBased(purityValue) {
-        if(!purityValue) return true;
+        if(!purityValue) return false;
         const lower = purityValue.toLowerCase();
-        return lower.includes('24k') || lower.includes('22k') || lower.includes('20k') || lower.includes('18k') || lower.includes('14k') || lower === 'gold';
+        return lower.includes('24k') || lower.includes('22k') || lower.includes('20k') || lower.includes('18k') || lower.includes('14k') || lower.includes('gold ornaments') || lower.includes('gold');
     }
 
     function updateMakingTypeByMetal(row) {
@@ -562,13 +506,13 @@
         if(goldMetal) {
             if(row.makingType !== 'percentage') {
                 row.makingType = 'percentage';
-                if(!row.makingPercent && row.makingPercent !== 0) row.makingPercent = 12;
+                if(!row.makingPercent || row.makingPercent === 0) row.makingPercent = 12;
                 row.makingFixed = 0;
             }
         } else {
             if(row.makingType !== 'fixed') {
                 row.makingType = 'fixed';
-                if(!row.makingFixed && row.makingFixed !== 0) row.makingFixed = 150;
+                if(!row.makingFixed || row.makingFixed === 0) row.makingFixed = 150;
                 row.makingPercent = 0;
             }
         }
@@ -581,52 +525,47 @@
         row.netWt = netWt;
         
         let rate = toNumber(row.ratePerGram);
-        let netWeightValue = netWt * rate;
-        let metalValue = netWeightValue;
+        let netValue = netWt * rate;
         
         let makingValue = 0;
         if (row.makingType === 'percentage') {
             let makingPercent = toNumber(row.makingPercent);
-            makingValue = metalValue * (makingPercent / 100);
+            makingValue = netValue * (makingPercent / 100);
         } else {
             makingValue = toNumber(row.makingFixed);
         }
         row.makingValue = makingValue;
         
-        let stoneValue = stoneWt * rate;
-        row.stoneValue = stoneValue;
+        let subTotal = netValue + makingValue;
+        row.rowTotal = subTotal;
         
-        let total = metalValue + makingValue + stoneValue;
-        row.rowTotal = total;
-        
-        return { metalValue, makingValue, stoneValue, total, netWt, netWeightValue };
+        return { netValue, makingValue, subTotal, netWt };
     }
 
     function recalcAll() {
-        let totalMaking = 0, totalStone = 0, totalTaxable = 0;
-        let totalNetWeightValue = 0;
+        let totalNetValue = 0, totalMaking = 0, totalSubTotal = 0;
+        let totalNetWt = 0;
         
         for(let i=0; i<itemsData.length; i++) {
             let row = itemsData[i];
             updateMakingTypeByMetal(row);
             let result = calculateRow(row);
+            totalNetValue += result.netValue;
             totalMaking += result.makingValue;
-            totalStone += result.stoneValue;
-            totalTaxable += result.total;
-            totalNetWeightValue += result.netWeightValue;
+            totalSubTotal += result.subTotal;
+            totalNetWt += result.netWt;
         }
         
         let discount = toNumber(discountInput.value);
-        let afterDiscount = totalTaxable - discount;
-        if(afterDiscount < 0) afterDiscount = 0;
-        let grandTotal = afterDiscount;
+        let grandTotal = totalSubTotal - discount;
+        if(grandTotal < 0) grandTotal = 0;
         
+        totalNetWeightGramsSpan.innerHTML = `${totalNetWt.toFixed(3)} g`;
+        totalNetValueSpan.innerHTML = `₹${totalNetValue.toFixed(2)}`;
         totalMakingSpan.innerHTML = `₹${totalMaking.toFixed(2)}`;
-        totalStoneSpan.innerHTML = `₹${totalStone.toFixed(2)}`;
         discountShowSpan.innerText = `₹${discount.toFixed(2)}`;
-        subTotalSpan.innerText = `₹${totalTaxable.toFixed(2)}`;
+        subTotalSpan.innerText = `₹${totalSubTotal.toFixed(2)}`;
         grandTotalSpan.innerText = `₹${grandTotal.toFixed(2)}`;
-        totalNetWeightValueSpan.innerHTML = `₹${totalNetWeightValue.toFixed(2)}`;
         
         amountWordsSpan.innerText = convertToIndianWords(Math.abs(grandTotal));
         
@@ -679,10 +618,9 @@
             let td = document.createElement('td');
             td.colSpan = 11;
             td.style.textAlign = 'center';
-            td.style.padding = '25px';
-            td.style.fontWeight = 'bold';
-            td.style.color = '#6c757d';
-            td.innerHTML = '— Click "ADD ITEM" to add products —';
+            td.style.padding = '20px';
+            td.style.color = '#adb5bd';
+            td.innerHTML = '— Click "Add Item" to add products —';
             tr.appendChild(td);
             tbody.appendChild(tr);
             return;
@@ -692,33 +630,35 @@
             let row = itemsData[idx];
             let tr = document.createElement('tr');
             
+            // SL No
             let tdSl = document.createElement('td');
             tdSl.innerText = idx+1;
-            tdSl.style.fontWeight = 'bold';
             tr.appendChild(tdSl);
             
+            // Item Description
             let tdDesc = document.createElement('td');
             let descInput = document.createElement('input');
             descInput.type = 'text';
             descInput.value = row.itemDesc || '';
             descInput.placeholder = 'Item name';
-            descInput.style.fontWeight = 'bold';
             descInput.onchange = (function(r) { return function(e) { r.itemDesc = e.target.value; recalcAll(); }; })(row);
             tdDesc.appendChild(descInput);
             tr.appendChild(tdDesc);
             
+            // HSN
             let tdHsn = document.createElement('td');
             let hsnInput = document.createElement('input');
             hsnInput.type = 'text';
             hsnInput.value = row.hsn || '7113';
-            hsnInput.style.width = '55px';
+            hsnInput.style.width = '50px';
             hsnInput.onchange = (function(r) { return function(e) { r.hsn = e.target.value; }; })(row);
             tdHsn.appendChild(hsnInput);
             tr.appendChild(tdHsn);
             
+            // Purity - with auto making type change
             let tdPurity = document.createElement('td');
             let puritySelect = document.createElement('select');
-            let purityOptions = ['24K (Gold)', '22K (Gold)', '20K (Gold)', '18K (Gold)', '14K (Gold)', 'Silver 999', 'Silver Ornaments'];
+            let purityOptions = ['24k(Gold), '22K (Gold)', '18K (Gold)', '14K (Gold)', '9K (Gold)', 'Gold Ornaments', 'Silver 999', 'Silver Ornaments'];
             purityOptions.forEach(p => {
                 let opt = document.createElement('option');
                 opt.value = p;
@@ -734,81 +674,105 @@
             tdPurity.appendChild(puritySelect);
             tr.appendChild(tdPurity);
             
+            // Gross Weight
             let tdGross = document.createElement('td');
             let grossInput = document.createElement('input');
             grossInput.type = 'number';
-            grossInput.value = row.grossWt || 0;
+            grossInput.value = row.grossWt !== undefined ? row.grossWt : '';
             grossInput.step = '0.01';
-            grossInput.style.width = '55px';
+            grossInput.style.width = '50px';
+            grossInput.placeholder = '0.00';
             grossInput.onchange = (function(r) { return function(e) { r.grossWt = toNumber(e.target.value); recalcAll(); }; })(row);
             tdGross.appendChild(grossInput);
             tr.appendChild(tdGross);
             
+            // Stone Weight
             let tdStone = document.createElement('td');
             let stoneInput = document.createElement('input');
             stoneInput.type = 'number';
-            stoneInput.value = row.stoneWt || 0;
+            stoneInput.value = row.stoneWt !== undefined ? row.stoneWt : '';
             stoneInput.step = '0.01';
-            stoneInput.style.width = '55px';
+            stoneInput.style.width = '50px';
+            stoneInput.placeholder = '0.00';
             stoneInput.onchange = (function(r) { return function(e) { r.stoneWt = toNumber(e.target.value); recalcAll(); }; })(row);
             tdStone.appendChild(stoneInput);
             tr.appendChild(tdStone);
             
+            // Net Weight (calculated display)
             let tdNet = document.createElement('td');
-            tdNet.innerText = (row.netWt || 0).toFixed(3);
+            let displayNetWt = Math.max(0, toNumber(row.grossWt) - toNumber(row.stoneWt));
+            tdNet.innerText = displayNetWt.toFixed(3);
             tdNet.style.fontWeight = 'bold';
             tr.appendChild(tdNet);
             
+            // Rate per gram
             let tdRate = document.createElement('td');
             let rateInput = document.createElement('input');
             rateInput.type = 'number';
-            rateInput.value = row.ratePerGram || 5800;
+            rateInput.value = row.ratePerGram !== undefined ? row.ratePerGram : '';
             rateInput.step = '10';
-            rateInput.style.width = '60px';
+            rateInput.style.width = '55px';
+            rateInput.placeholder = 'Rate';
             rateInput.onchange = (function(r) { return function(e) { r.ratePerGram = toNumber(e.target.value); recalcAll(); }; })(row);
             tdRate.appendChild(rateInput);
             tr.appendChild(tdRate);
             
+            // Making Type (selectable dropdown)
             let tdMakingType = document.createElement('td');
-            let typeSpan = document.createElement('span');
-            typeSpan.style.fontWeight = '900';
-            typeSpan.style.background = '#e9ecef';
-            typeSpan.style.padding = '4px 8px';
-            typeSpan.style.borderRadius = '4px';
-            typeSpan.style.display = 'inline-block';
-            typeSpan.className = 'making-type-print';
-            typeSpan.innerText = row.makingType === 'percentage' ? 'Gold %' : 'Fixed ₹';
-            tdMakingType.appendChild(typeSpan);
+            let makingSelect = document.createElement('select');
+            makingSelect.className = 'making-select';
+            let goldOption = document.createElement('option');
+            goldOption.value = 'percentage';
+            goldOption.innerText = 'Gold %';
+            let silverOption = document.createElement('option');
+            silverOption.value = 'fixed';
+            silverOption.innerText = 'Fixed ₹';
+            makingSelect.appendChild(goldOption);
+            makingSelect.appendChild(silverOption);
+            makingSelect.value = row.makingType || 'percentage';
+            makingSelect.onchange = (function(r) { return function(e) { 
+                r.makingType = e.target.value; 
+                recalcAll(); 
+            }; })(row);
+            tdMakingType.appendChild(makingSelect);
             tr.appendChild(tdMakingType);
             
+            // Making value input (percentage or fixed)
             let tdMakingInput = document.createElement('td');
             let makingInput = document.createElement('input');
             makingInput.type = 'number';
-            makingInput.step = '0.5';
-            makingInput.style.width = '60px';
+            makingInput.step = '0.1';
+            makingInput.style.width = '50px';
             if (row.makingType === 'percentage') {
-                makingInput.value = row.makingPercent || 12;
+                makingInput.value = row.makingPercent !== undefined ? row.makingPercent : 12;
                 makingInput.placeholder = '%';
             } else {
-                makingInput.value = row.makingFixed || 150;
+                makingInput.value = row.makingFixed !== undefined ? row.makingFixed : 150;
                 makingInput.placeholder = '₹';
             }
             makingInput.onchange = (function(r) { return function(e) {
-                let val = toNumber(e.target.value);
                 if (r.makingType === 'percentage') {
-                    r.makingPercent = val;
+                    r.makingPercent = toNumber(e.target.value);
                 } else {
-                    r.makingFixed = val;
+                    r.makingFixed = toNumber(e.target.value);
                 }
                 recalcAll();
             }; })(row);
             tdMakingInput.appendChild(makingInput);
             tr.appendChild(tdMakingInput);
             
+            // Delete button
             let tdAction = document.createElement('td');
             let delBtn = document.createElement('button');
-            delBtn.innerHTML = '✕';
+            delBtn.innerHTML = '❌';
             delBtn.className = 'delete-btn';
+            delBtn.style.background = '#dc3545';
+            delBtn.style.color = 'white';
+            delBtn.style.border = 'none';
+            delBtn.style.padding = '5px 10px';
+            delBtn.style.borderRadius = '3px';
+            delBtn.style.cursor = 'pointer';
+            delBtn.style.fontSize = '12px';
             delBtn.style.fontWeight = 'bold';
             delBtn.onclick = (function(i) { return function() { itemsData.splice(i, 1); recalcAll(); }; })(idx);
             tdAction.appendChild(delBtn);
@@ -817,35 +781,33 @@
             tbody.appendChild(tr);
         }
         
+        // Update net weight display for all rows
         for(let i=0; i<itemsData.length && tbody.children[i]; i++) {
             let cells = tbody.children[i].cells;
             if(cells.length >= 11) {
-                cells[6].innerText = (itemsData[i].netWt || 0).toFixed(3);
-                let typeSpan = cells[8].querySelector('span');
-                if(typeSpan) typeSpan.innerText = itemsData[i].makingType === 'percentage' ? 'Gold %' : 'Fixed ₹';
-                let makingInput = cells[9].querySelector('input');
-                if(makingInput) {
-                    if(itemsData[i].makingType === 'percentage') {
-                        makingInput.placeholder = '%';
-                        makingInput.value = itemsData[i].makingPercent || 12;
-                    } else {
-                        makingInput.placeholder = '₹';
-                        makingInput.value = itemsData[i].makingFixed || 150;
-                    }
-                }
+                let gross = toNumber(itemsData[i].grossWt);
+                let stone = toNumber(itemsData[i].stoneWt);
+                let displayNet = Math.max(0, gross - stone);
+                cells[6].innerText = displayNet.toFixed(3);
             }
         }
     }
 
     function addNewItem() {
-        let newItem = {
-            itemDesc: '', hsn: '7113', purity: '22K (Gold)',
-            grossWt: 0, stoneWt: 0, netWt: 0,
-            ratePerGram: 5800, makingType: 'percentage', makingPercent: 12, makingFixed: 150,
-            makingValue: 0, stoneValue: 0, rowTotal: 0
-        };
-        updateMakingTypeByMetal(newItem);
-        itemsData.push(newItem);
+        itemsData.push({
+            itemDesc: '',
+            hsn: '7113',
+            purity: '22K (Gold)',
+            grossWt: 0,
+            stoneWt: 0,
+            netWt: 0,
+            ratePerGram: 0,
+            makingType: 'percentage',
+            makingPercent: 12,
+            makingFixed: 150,
+            makingValue: 0,
+            rowTotal: 0
+        });
         recalcAll();
     }
     
@@ -854,7 +816,7 @@
         if(custName === '') { alert('Please enter Customer Name'); return false; }
         let msg = document.createElement('div');
         msg.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#28a745;color:white;padding:10px 18px;border-radius:5px;z-index:1000;font-size:12px;font-weight:bold;';
-        msg.innerHTML = 'Invoice saved successfully!';
+        msg.innerHTML = '✓ Invoice saved successfully!';
         document.body.appendChild(msg);
         setTimeout(() => msg.remove(), 2000);
         return true;
@@ -879,6 +841,7 @@
     });
     
     setInvoiceMeta();
+    // NO DEFAULT DATA - Empty items array, user must click "Add Item"
     itemsData = [];
     recalcAll();
     updatePrintDisplay();
