@@ -307,12 +307,15 @@
                 color: black !important;
                 font-weight: 600 !important;
             }
+            select {
+                -webkit-appearance: none;
+                appearance: none;
+                border: none;
+            }
             .items-table th, .items-table td { border: 1px solid black !important; }
             .vendor-header, .meta-box, .tax-card, .amount-card, .sign-box { border: 1px solid black !important; }
             .print-payment-display { display: block; font-weight: 700; padding: 5px 0; }
             .screen-payment { display: none; }
-            .making-type-text { display: inline-block !important; }
-            select, .making-select { display: none !important; }
         }
     </style>
 </head>
@@ -366,7 +369,6 @@
             </div>
         </div>
 
-        <!-- ITEMS TABLE - HSN column removed -->
         <div class="items-wrapper">
             <table class="items-table">
                 <thead>
@@ -383,7 +385,6 @@
             <button class="add-item-btn" id="addItemBtn">+ Add Item</button>
         </div>
 
-        <!-- BILL SUMMARY - Net Weight (g) removed -->
         <div class="totals-grid">
             <div class="tax-card">
                 <h5>Bill Summary</h5>
@@ -425,30 +426,41 @@
         document.getElementById('invoiceDateDisplay').innerText = f;
     }
 
-    function isGold(p) {
-        if(!p) return false;
-        let l = p.toLowerCase();
-        return l.includes('24k')||l.includes('22k')||l.includes('18k')||l.includes('14k')||l.includes('9k')||l.includes('gold');
+    // Check if purity is Gold (including Gold Ornaments)
+    function isGold(purity) {
+        if(!purity) return false;
+        let p = purity.toLowerCase();
+        return p.includes('24k') || p.includes('22k') || p.includes('18k') || p.includes('14k') || p.includes('9k') || p.includes('gold ornaments') || p.includes('gold');
     }
 
-    function updateMaking(row) {
+    // Check if purity is Silver
+    function isSilver(purity) {
+        if(!purity) return false;
+        let p = purity.toLowerCase();
+        return p.includes('silver');
+    }
+
+    // Auto-update making type based on purity selection
+    function updateMakingTypeByPurity(row) {
         if(isGold(row.purity)) {
+            // Gold items: Set to percentage (Gold %)
             if(row.makingType !== 'percentage') {
                 row.makingType = 'percentage';
-                if(!row.makingPercent) row.makingPercent = 12;
+                if(!row.makingPercent || row.makingPercent === 0) row.makingPercent = 12;
             }
-        } else {
+        } else if(isSilver(row.purity)) {
+            // Silver items: Set to fixed (Fixed ₹)
             if(row.makingType !== 'fixed') {
                 row.makingType = 'fixed';
-                if(!row.makingFixed) row.makingFixed = 150;
+                if(!row.makingFixed || row.makingFixed === 0) row.makingFixed = 150;
             }
         }
+        // For other purities, keep existing making type
     }
 
     function calculate() {
         let totalNetVal = 0, totalMaking = 0, totalSub = 0;
         for(let row of itemsData) {
-            updateMaking(row);
             let gross = toNumber(row.grossWt), stone = toNumber(row.stoneWt);
             let netWt = Math.max(0, gross - stone);
             row.netWt = netWt;
@@ -520,6 +532,7 @@
             let tr = tbody.insertRow();
             tr.insertCell().innerText = i+1;
             
+            // Item Description
             let td1 = tr.insertCell();
             let inpDesc = document.createElement('input');
             inpDesc.type = 'text';
@@ -528,18 +541,26 @@
             inpDesc.onchange = (function(r){return function(e){r.itemDesc=e.target.value;calculate();}})(row);
             td1.appendChild(inpDesc);
             
+            // Purity - When changed, auto-update making type
             let td2 = tr.insertCell();
             let selPur = document.createElement('select');
-            ['24K (Gold)','22K (Gold)','18K (Gold)','14K (Gold)','9K (Gold)','Gold Ornaments','Silver 999','Silver Ornaments'].forEach(p=>{
+            let purityOptions = ['24K (Gold)','22K (Gold)','18K (Gold)','14K (Gold)','9K (Gold)','Gold Ornaments','Silver 999','Silver Ornaments'];
+            purityOptions.forEach(p=>{
                 let opt = document.createElement('option');
                 opt.value = p;
                 opt.innerText = p;
                 if(row.purity === p) opt.selected = true;
                 selPur.appendChild(opt);
             });
-            selPur.onchange = (function(r){return function(e){r.purity=e.target.value;updateMaking(r);calculate();}})(row);
+            selPur.onchange = (function(r, idx){return function(e){
+                r.purity = e.target.value;
+                // Auto-update making type based on new purity
+                updateMakingTypeByPurity(r);
+                calculate();
+            }})(row, i);
             td2.appendChild(selPur);
             
+            // Gross Weight
             let td3 = tr.insertCell();
             let inpGr = document.createElement('input');
             inpGr.type = 'number';
@@ -550,6 +571,7 @@
             inpGr.onchange = (function(r){return function(e){r.grossWt=toNumber(e.target.value);calculate();}})(row);
             td3.appendChild(inpGr);
             
+            // Stone Weight
             let td4 = tr.insertCell();
             let inpSt = document.createElement('input');
             inpSt.type = 'number';
@@ -560,11 +582,13 @@
             inpSt.onchange = (function(r){return function(e){r.stoneWt=toNumber(e.target.value);calculate();}})(row);
             td4.appendChild(inpSt);
             
+            // Net Weight (calculated display)
             let td5 = tr.insertCell();
             let netDisplay = Math.max(0, toNumber(row.grossWt) - toNumber(row.stoneWt)).toFixed(3);
             td5.innerText = netDisplay;
             td5.style.fontWeight = 'bold';
             
+            // Rate per gram
             let td6 = tr.insertCell();
             let inpRate = document.createElement('input');
             inpRate.type = 'number';
@@ -575,8 +599,10 @@
             inpRate.onchange = (function(r){return function(e){r.ratePerGram=toNumber(e.target.value);calculate();}})(row);
             td6.appendChild(inpRate);
             
+            // Making Type - User can manually change if needed, but auto-set by purity
             let td7 = tr.insertCell();
             let selType = document.createElement('select');
+            selType.style.width = '70px';
             let optP = document.createElement('option');
             optP.value = 'percentage';
             optP.innerText = 'Gold %';
@@ -586,18 +612,13 @@
             selType.appendChild(optP);
             selType.appendChild(optF);
             selType.value = row.makingType || 'percentage';
-            selType.onchange = (function(r){return function(e){r.makingType=e.target.value;calculate();}})(row);
+            selType.onchange = (function(r){return function(e){
+                r.makingType = e.target.value;
+                calculate();
+            }})(row);
             td7.appendChild(selType);
-            let spanType = document.createElement('span');
-            spanType.className = 'making-type-text';
-            spanType.style.display = 'none';
-            spanType.style.fontWeight = 'bold';
-            spanType.style.background = '#e9ecef';
-            spanType.style.padding = '2px 6px';
-            spanType.style.borderRadius = '3px';
-            spanType.innerText = row.makingType === 'percentage' ? 'Gold %' : 'Fixed ₹';
-            td7.appendChild(spanType);
             
+            // Making value (percentage or fixed)
             let td8 = tr.insertCell();
             let inpMake = document.createElement('input');
             inpMake.type = 'number';
@@ -617,14 +638,8 @@
                 calculate();
             }})(row);
             td8.appendChild(inpMake);
-            let spanMake = document.createElement('span');
-            spanMake.className = 'making-value-text';
-            spanMake.style.display = 'none';
-            spanMake.style.fontWeight = 'bold';
-            if(row.makingType === 'percentage') spanMake.innerText = (row.makingPercent || 12) + '%';
-            else spanMake.innerText = '₹' + (row.makingFixed || 150);
-            td8.appendChild(spanMake);
             
+            // Delete button
             let td9 = tr.insertCell();
             let delBtn = document.createElement('button');
             delBtn.innerHTML = '❌';
@@ -636,7 +651,7 @@
 
     function addItem() {
         itemsData.push({
-            itemDesc: '', purity: '22K (Gold)',
+            itemDesc: '', purity: 'Gold Ornaments',
             grossWt: 0, stoneWt: 0, netWt: 0, ratePerGram: 0,
             makingType: 'percentage', makingPercent: 12, makingFixed: 150,
             makingValue: 0, rowTotal: 0
@@ -659,15 +674,8 @@
     function printInvoice() {
         if(document.getElementById('custName').value.trim() === '') { alert('Please enter Customer Name'); return false; }
         if(itemsData.length === 0) { alert('Please add at least one item'); return false; }
-        // Hide dropdowns and show text spans for print
-        document.querySelectorAll('select').forEach(el => el.style.display = 'none');
-        document.querySelectorAll('.making-type-text, .making-value-text').forEach(el => el.style.display = 'inline-block');
         updatePrintPayment();
         window.print();
-        setTimeout(() => {
-            document.querySelectorAll('select').forEach(el => el.style.display = '');
-            document.querySelectorAll('.making-type-text, .making-value-text').forEach(el => el.style.display = 'none');
-        }, 100);
         return true;
     }
 
